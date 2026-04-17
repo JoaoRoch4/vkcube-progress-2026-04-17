@@ -12,7 +12,7 @@ AppWindows::AppWindows()
     , show_copilot { true }
     , show_hot_module { true }
     , show_cube { true }
-	, CopilotWindowFlags { ImGuiWindowFlags_None }
+    , CopilotWindowFlags { ImGuiWindowFlags_None }
     , copilot_messages {}
     , user_messages {}
     , m_cube { nullptr }

@@ -203,7 +203,7 @@ void ApplyStyleToml(ImGuiStyle* style, const WindowStateToml::StyleToml& persist
 
 StyleEditor::StyleEditor()
     : IsOpen { false }
-	, WindowFlags { ImGuiWindowFlags_None }
+    , WindowFlags { ImGuiWindowFlags_None }
     , m_default_style {}
     , m_current_preset_name {}
     , m_window_rect { false, 0.0f, 0.0f, 0.0f, 0.0f }
@@ -338,7 +338,7 @@ void StyleEditor::ApplyPresetByName(const std::string& preset_name)
 	style.Colors[ImGuiCol_TableBorderStrong] = ImVec4(0.22f, 0.22f, 0.22f, 0.70f);
 	style.Colors[ImGuiCol_TableBorderLight] = ImVec4(0.14f, 0.14f, 0.14f, 0.56f);
 	style.Colors[ImGuiCol_TableRowBg] = ImVec4(1.00f, 1.00f, 1.00f, 0.00f);
-	style.Colors[ImGuiCol_TableRowBgAlt] = ImVec4(0.20f, 0.20f, 0.20f, 0.10f); // 
+	style.Colors[ImGuiCol_TableRowBgAlt] = ImVec4(0.20f, 0.20f, 0.20f, 0.10f); //
 	style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.34f, 0.34f, 0.34f, 0.40f);
 	style.Colors[ImGuiCol_DragDropTarget] = ImVec4(0.86f, 0.86f, 0.86f, 0.95f);
 	style.Colors[ImGuiCol_NavCursor] = ImVec4(0.80f, 0.80f, 0.80f, 0.95f);

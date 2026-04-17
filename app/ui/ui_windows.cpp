@@ -24,10 +24,10 @@ UiWindows::UiWindows()
     , ShowEmojiAtlasWindow { true }
     , RequestQuit { false }
     , ClearColor { 0.45f, 0.55f, 0.60f, 1.00f }
-	, HelloWorldWindowFlags { ImGuiWindowFlags_None }
-	, AnotherWindowFlags { ImGuiWindowFlags_None }
-	, TerminalWindowFlags { ImGuiWindowFlags_None }
-	, EmojiAtlasWindowFlags { ImGuiWindowFlags_None }
+    , HelloWorldWindowFlags { ImGuiWindowFlags_None }
+    , AnotherWindowFlags { ImGuiWindowFlags_None }
+    , TerminalWindowFlags { ImGuiWindowFlags_None }
+    , EmojiAtlasWindowFlags { ImGuiWindowFlags_None }
     , m_emoji_atlas_view { nullptr }
     , m_hello_world_window { false, 0.0f, 0.0f, 0.0f, 0.0f }
     , m_terminals_window { false, 0.0f, 0.0f, 0.0f, 0.0f }
@@ -37,8 +37,8 @@ UiWindows::UiWindows()
     , m_apply_terminals_layout_once { false }
     , m_apply_emoji_atlas_layout_once { false }
     , m_apply_another_layout_once { false }
-	, m_show_controls { nullptr }
-	, m_draw_controls_section {}
+    , m_show_controls { nullptr }
+    , m_draw_controls_section {}
 {
 }
 
