@@ -48,6 +48,16 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "type": "lldb-dap",
+            "request": "launch",
+            "name": "Debug imrad_simple_program (LLDB)",
+            "program": "${workspaceFolder}/cmake-build/imrad_simple_program",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "cmake: build imrad_simple_program",
+            "internalConsoleOptions": "openOnSessionStart"
         }
     ]
 }

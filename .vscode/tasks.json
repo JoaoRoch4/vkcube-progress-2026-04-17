@@ -107,6 +107,74 @@
             },
             "group": "build",
             "label": "makelldb: selected file"
+        },
+        {
+            "label": "run: imrad_simple_program",
+            "type": "shell",
+            "command": "./cmake-build/imrad_simple_program",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "dependsOn": "cmake: build"
+        },
+        {
+            "label": "cmake: build imrad_simple_program",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "cmake-build",
+                "--target",
+                "imrad_simple_program",
+                "-j8"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": "cmake: configure",
+            "group": "build"
+        },
+        {
+            "label": "test: ctest",
+            "type": "shell",
+            "command": "ctest",
+            "args": [
+                "--verbose",
+                "--output-on-failure"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/cmake-build"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "dependsOn": "cmake: build"
+        },
+        {
+            "label": "test: pytest",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "-m",
+                "pytest",
+                "tests/",
+                "-v",
+                "--tb=short"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            }
         }
     ]
 }

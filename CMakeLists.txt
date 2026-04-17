@@ -160,6 +160,53 @@ target_compile_options(vkcube PRIVATE
     $<$<CONFIG:Release>:-O2>
 )
 
+# ── Standalone ImRAD simple program ──────────────────────────────────────────
+add_executable(imrad_simple_program
+    ${APP_DIR}/ui/imrad/simple_program_main.cpp
+    ${APP_DIR}/ui/imrad/simple_window.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/imgui_test_engine_stubs.cpp
+    ${APP_DIR}/platform/sdl_window.cpp
+    ${APP_DIR}/platform/plutosvg_ft_override.cpp
+    ${APP_DIR}/renderer/vulkan/vulkan_context.cpp
+    ${APP_DIR}/ui/imgui_layer.cpp
+    ${IMGUI_CORE_SOURCES}
+)
+
+target_include_directories(imrad_simple_program PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${APP_DIR}
+    ${IMGUI_DIR}
+    ${IMGUI_DIR}/backends
+    ${IMGUI_DIR}/misc/freetype
+    ${Vulkan_INCLUDE_DIRS}
+)
+
+target_compile_definitions(imrad_simple_program PRIVATE
+    IMGUI_USER_CONFIG="imconfig.h"
+)
+
+target_link_libraries(imrad_simple_program PRIVATE
+    PkgConfig::SDL3
+    PkgConfig::FREETYPE
+    PkgConfig::PLUTOSVG
+    PkgConfig::LIBPNG
+    Vulkan::Vulkan
+    ${MATH_LIB}
+    ${CMAKE_DL_LIBS}
+    pthread
+)
+
+target_link_options(imrad_simple_program PRIVATE
+    -Wl,--wrap=plutosvg_ft_svg_hooks
+)
+
+target_compile_options(imrad_simple_program PRIVATE
+    -Wall
+    -Wformat
+    $<$<CONFIG:Debug>:-g>
+    $<$<CONFIG:Release>:-O2>
+)
+
 # ── Hot-reload shared library ───────────────────────────────────────────────────────
 add_library(hot SHARED
     ${APP_DIR}/hot_module.cpp

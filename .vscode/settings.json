@@ -11,5 +11,10 @@
         "--compile-commands-dir=cmake-build",
         "--clang-tidy",
         "--background-index"
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "app"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

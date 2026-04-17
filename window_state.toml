@@ -1,0 +1,993 @@
+# vkcube persisted UI state (auto-generated). Manual edits are allowed.
+# Cube animation toggle (true = auto rotate, false = manual drag only).
+# Auto-rotate cube each frame when true.
+cube_auto_spin = true
+# Show the 'Another Window' sample panel.
+show_another_window = false
+# Window toggles persisted between runs.
+# Show embedded Controls section inside Hello, world! window.
+show_controls = true
+# Show Copilot chat/testing window.
+show_copilot = true
+# Cube background visibility (false uses clear_color as scene background).
+# Show cube in Vulkan background.
+show_cube = true
+# Show debug log mirror window.
+show_debug_log_mirror_window = true
+# Show Dear ImGui demo window.
+show_demo_window = true
+# Show emoji atlas preview window.
+show_emoji_atlas_window = true
+# Show hot-reload module UI window.
+show_hot_module = true
+# Show Style Editor window.
+show_style_editor_window = false
+# Show terminals window.
+show_terminal_window = true
+# Show imgui_test_engine control window.
+show_test_engine_window = true
+
+[another_window]
+# Window height in pixels.
+h = 0.0
+# True if this saved rectangle should be applied.
+valid = false
+# Window width in pixels.
+w = 0.0
+# Window left position in pixels.
+x = 0.0
+# Window top position in pixels.
+y = 0.0
+
+# Clear color used when cube background is disabled.
+[clear_color]
+# Alpha channel (0..1).
+w = 1.0
+# Red channel (0..1).
+x = 0.44999998807907104
+# Green channel (0..1).
+y = 0.55000001192092896
+# Blue channel (0..1).
+z = 0.60000002384185791
+
+# Legacy layout section retained for compatibility.
+[controls_window]
+# Window height in pixels.
+h = 0.0
+# True if this saved rectangle should be applied.
+valid = false
+# Window width in pixels.
+w = 0.0
+# Window left position in pixels.
+x = 0.0
+# Window top position in pixels.
+y = 0.0
+
+# Window rectangle fields: x/y = top-left, w/h = size, valid = apply saved rect.
+[copilot_window]
+# Window height in pixels.
+h = 200.0
+# True if this saved rectangle should be applied.
+valid = true
+# Window width in pixels.
+w = 480.0
+# Window left position in pixels.
+x = 20.0
+# Window top position in pixels.
+y = 200.0
+
+[emoji_atlas_window]
+# Window height in pixels.
+h = 0.0
+# True if this saved rectangle should be applied.
+valid = false
+# Window width in pixels.
+w = 0.0
+# Window left position in pixels.
+x = 0.0
+# Window top position in pixels.
+y = 0.0
+
+# Hello, world! window rectangle.
+[hello_world_window]
+# Window height in pixels.
+h = 352.0
+# True if this saved rectangle should be applied.
+valid = true
+# Window width in pixels.
+w = 320.0
+# Window left position in pixels.
+x = 1024.0
+# Window top position in pixels.
+y = 95.0
+
+# Full Dear ImGui style snapshot (preset + all style fields).
+[style]
+# Saved Dear ImGui style value for 'alpha'.
+alpha = 1.0
+# Saved Dear ImGui style value for 'anti_aliased_fill'.
+anti_aliased_fill = true
+# Saved Dear ImGui style value for 'anti_aliased_lines'.
+anti_aliased_lines = true
+# Saved Dear ImGui style value for 'anti_aliased_lines_use_tex'.
+anti_aliased_lines_use_tex = true
+# Saved Dear ImGui style value for 'child_border_size'.
+child_border_size = 1.0
+# Saved Dear ImGui style value for 'child_rounding'.
+child_rounding = 0.0
+# Saved Dear ImGui style value for 'circle_tessellation_max_error'.
+circle_tessellation_max_error = 0.30000001192092896
+# Saved Dear ImGui style value for 'color_button_position'.
+color_button_position = 1
+# Saved Dear ImGui style value for 'color_marker_size'.
+color_marker_size = 3.0
+# Saved Dear ImGui style value for 'columns_min_spacing'.
+columns_min_spacing = 6.0
+# Saved Dear ImGui style value for 'curve_tessellation_tol'.
+curve_tessellation_tol = 1.25
+# Saved Dear ImGui style value for 'disabled_alpha'.
+disabled_alpha = 0.60000002384185791
+# Saved Dear ImGui style value for 'drag_drop_target_border_size'.
+drag_drop_target_border_size = 2.0
+# Saved Dear ImGui style value for 'drag_drop_target_padding'.
+drag_drop_target_padding = 3.0
+# Saved Dear ImGui style value for 'drag_drop_target_rounding'.
+drag_drop_target_rounding = 0.0
+# Saved Dear ImGui style value for 'font_scale_dpi'.
+font_scale_dpi = 1.0
+# Saved Dear ImGui style value for 'font_scale_main'.
+font_scale_main = 1.0
+# Saved Dear ImGui style value for 'font_size_base'.
+font_size_base = 20.0
+# Saved Dear ImGui style value for 'frame_border_size'.
+frame_border_size = 0.0
+# Saved Dear ImGui style value for 'frame_rounding'.
+frame_rounding = 0.0
+# Saved Dear ImGui style value for 'grab_min_size'.
+grab_min_size = 12.0
+# Saved Dear ImGui style value for 'grab_rounding'.
+grab_rounding = 0.0
+# Saved Dear ImGui style value for 'hover_delay_normal'.
+hover_delay_normal = 0.40000000596046448
+# Saved Dear ImGui style value for 'hover_delay_short'.
+hover_delay_short = 0.15000000596046448
+# Saved Dear ImGui style value for 'hover_flags_for_tooltip_mouse'.
+hover_flags_for_tooltip_mouse = 41984
+# Saved Dear ImGui style value for 'hover_flags_for_tooltip_nav'.
+hover_flags_for_tooltip_nav = 197632
+# Saved Dear ImGui style value for 'hover_stationary_delay'.
+hover_stationary_delay = 0.15000000596046448
+# Saved Dear ImGui style value for 'image_border_size'.
+image_border_size = 0.0
+# Saved Dear ImGui style value for 'image_rounding'.
+image_rounding = 0.0
+# Saved Dear ImGui style value for 'indent_spacing'.
+indent_spacing = 21.0
+# Saved Dear ImGui style value for 'log_slider_deadzone'.
+log_slider_deadzone = 4.0
+# Saved Dear ImGui style value for 'mouse_cursor_scale'.
+mouse_cursor_scale = 1.0
+# Saved Dear ImGui style value for 'popup_border_size'.
+popup_border_size = 1.0
+# Saved Dear ImGui style value for 'popup_rounding'.
+popup_rounding = 0.0
+# Saved Dear ImGui style value for 'preset_name'.
+preset_name = 'ImGui Default'
+# Saved Dear ImGui style value for 'scrollbar_padding'.
+scrollbar_padding = 2.0
+# Saved Dear ImGui style value for 'scrollbar_rounding'.
+scrollbar_rounding = 9.0
+# Saved Dear ImGui style value for 'scrollbar_size'.
+scrollbar_size = 14.0
+# Saved Dear ImGui style value for 'separator_size'.
+separator_size = 1.0
+# Saved Dear ImGui style value for 'separator_text_border_size'.
+separator_text_border_size = 3.0
+# Saved Dear ImGui style value for 'tab_bar_border_size'.
+tab_bar_border_size = 1.0
+# Saved Dear ImGui style value for 'tab_bar_overline_size'.
+tab_bar_overline_size = 1.0
+# Saved Dear ImGui style value for 'tab_border_size'.
+tab_border_size = 0.0
+# Saved Dear ImGui style value for 'tab_close_button_min_width_selected'.
+tab_close_button_min_width_selected = -1.0
+# Saved Dear ImGui style value for 'tab_close_button_min_width_unselected'.
+tab_close_button_min_width_unselected = 0.0
+# Saved Dear ImGui style value for 'tab_min_width_base'.
+tab_min_width_base = 1.0
+# Saved Dear ImGui style value for 'tab_min_width_shrink'.
+tab_min_width_shrink = 80.0
+# Saved Dear ImGui style value for 'tab_rounding'.
+tab_rounding = 5.0
+# Saved Dear ImGui style value for 'table_angled_headers_angle'.
+table_angled_headers_angle = 0.61086523532867432
+# Saved Dear ImGui style value for 'tree_lines_flags'.
+tree_lines_flags = 262144
+# Saved Dear ImGui style value for 'tree_lines_rounding'.
+tree_lines_rounding = 0.0
+# Saved Dear ImGui style value for 'tree_lines_size'.
+tree_lines_size = 1.0
+# Saved Dear ImGui style value for 'window_border_hover_padding'.
+window_border_hover_padding = 4.0
+# Saved Dear ImGui style value for 'window_border_size'.
+window_border_size = 1.0
+# Saved Dear ImGui style value for 'window_menu_button_position'.
+window_menu_button_position = 0
+# Saved Dear ImGui style value for 'window_rounding'.
+window_rounding = 0.0
+
+    [style.button_text_align]
+# X component.
+    x = 0.5
+# Y component.
+    y = 0.5
+
+    [style.cell_padding]
+# X component.
+    x = 4.0
+# Y component.
+    y = 2.0
+
+    [style.display_safe_area_padding]
+# X component.
+    x = 3.0
+# Y component.
+    y = 3.0
+
+    [style.display_window_padding]
+# X component.
+    x = 19.0
+# Y component.
+    y = 19.0
+
+    [style.frame_padding]
+# X component.
+    x = 4.0
+# Y component.
+    y = 3.0
+
+    [style.item_inner_spacing]
+# X component.
+    x = 4.0
+# Y component.
+    y = 4.0
+
+    [style.item_spacing]
+# X component.
+    x = 8.0
+# Y component.
+    y = 4.0
+
+    [style.selectable_text_align]
+# X component.
+    x = 0.0
+# Y component.
+    y = 0.0
+
+    [style.separator_text_align]
+# X component.
+    x = 0.0
+# Y component.
+    y = 0.5
+
+    [style.separator_text_padding]
+# X component.
+    x = 20.0
+# Y component.
+    y = 3.0
+
+    [style.table_angled_headers_text_align]
+# X component.
+    x = 0.5
+# Y component.
+    y = 0.0
+
+    [style.touch_extra_padding]
+# X component.
+    x = 0.0
+# Y component.
+    y = 0.0
+
+    [style.window_min_size]
+# X component.
+    x = 32.0
+# Y component.
+    y = 32.0
+
+    [style.window_padding]
+# X component.
+    x = 8.0
+# Y component.
+    y = 8.0
+
+    [style.window_title_align]
+# X component.
+    x = 0.0
+# Y component.
+    y = 0.5
+
+# style.colors[0] = ImGuiCol_Text
+    [[style.colors]]
+# ImGuiCol_Text alpha channel.
+    w = 1.0
+# ImGuiCol_Text red channel.
+    x = 1.0
+# ImGuiCol_Text green channel.
+    y = 1.0
+# ImGuiCol_Text blue channel.
+    z = 1.0
+
+# style.colors[1] = ImGuiCol_TextDisabled
+    [[style.colors]]
+# ImGuiCol_TextDisabled alpha channel.
+    w = 1.0
+# ImGuiCol_TextDisabled red channel.
+    x = 0.5
+# ImGuiCol_TextDisabled green channel.
+    y = 0.5
+# ImGuiCol_TextDisabled blue channel.
+    z = 0.5
+
+# style.colors[2] = ImGuiCol_WindowBg
+    [[style.colors]]
+# ImGuiCol_WindowBg alpha channel.
+    w = 0.93999999761581421
+# ImGuiCol_WindowBg red channel.
+    x = 0.059999998658895493
+# ImGuiCol_WindowBg green channel.
+    y = 0.059999998658895493
+# ImGuiCol_WindowBg blue channel.
+    z = 0.059999998658895493
+
+# style.colors[3] = ImGuiCol_ChildBg
+    [[style.colors]]
+# ImGuiCol_ChildBg alpha channel.
+    w = 0.0
+# ImGuiCol_ChildBg red channel.
+    x = 0.0
+# ImGuiCol_ChildBg green channel.
+    y = 0.0
+# ImGuiCol_ChildBg blue channel.
+    z = 0.0
+
+# style.colors[4] = ImGuiCol_PopupBg
+    [[style.colors]]
+# ImGuiCol_PopupBg alpha channel.
+    w = 0.93999999761581421
+# ImGuiCol_PopupBg red channel.
+    x = 0.079999998211860657
+# ImGuiCol_PopupBg green channel.
+    y = 0.079999998211860657
+# ImGuiCol_PopupBg blue channel.
+    z = 0.079999998211860657
+
+# style.colors[5] = ImGuiCol_Border
+    [[style.colors]]
+# ImGuiCol_Border alpha channel.
+    w = 0.5
+# ImGuiCol_Border red channel.
+    x = 0.43000000715255737
+# ImGuiCol_Border green channel.
+    y = 0.43000000715255737
+# ImGuiCol_Border blue channel.
+    z = 0.5
+
+# style.colors[6] = ImGuiCol_BorderShadow
+    [[style.colors]]
+# ImGuiCol_BorderShadow alpha channel.
+    w = 0.0
+# ImGuiCol_BorderShadow red channel.
+    x = 0.0
+# ImGuiCol_BorderShadow green channel.
+    y = 0.0
+# ImGuiCol_BorderShadow blue channel.
+    z = 0.0
+
+# style.colors[7] = ImGuiCol_FrameBg
+    [[style.colors]]
+# ImGuiCol_FrameBg alpha channel.
+    w = 0.54000002145767212
+# ImGuiCol_FrameBg red channel.
+    x = 0.15999999642372131
+# ImGuiCol_FrameBg green channel.
+    y = 0.28999999165534973
+# ImGuiCol_FrameBg blue channel.
+    z = 0.47999998927116394
+
+# style.colors[8] = ImGuiCol_FrameBgHovered
+    [[style.colors]]
+# ImGuiCol_FrameBgHovered alpha channel.
+    w = 0.40000000596046448
+# ImGuiCol_FrameBgHovered red channel.
+    x = 0.25999999046325684
+# ImGuiCol_FrameBgHovered green channel.
+    y = 0.5899999737739563
+# ImGuiCol_FrameBgHovered blue channel.
+    z = 0.98000001907348633
+
+# style.colors[9] = ImGuiCol_FrameBgActive
+    [[style.colors]]
+# ImGuiCol_FrameBgActive alpha channel.
+    w = 0.67000001668930054
+# ImGuiCol_FrameBgActive red channel.
+    x = 0.25999999046325684
+# ImGuiCol_FrameBgActive green channel.
+    y = 0.5899999737739563
+# ImGuiCol_FrameBgActive blue channel.
+    z = 0.98000001907348633
+
+# style.colors[10] = ImGuiCol_TitleBg
+    [[style.colors]]
+# ImGuiCol_TitleBg alpha channel.
+    w = 1.0
+# ImGuiCol_TitleBg red channel.
+    x = 0.039999999105930328
+# ImGuiCol_TitleBg green channel.
+    y = 0.039999999105930328
+# ImGuiCol_TitleBg blue channel.
+    z = 0.039999999105930328
+
+# style.colors[11] = ImGuiCol_TitleBgActive
+    [[style.colors]]
+# ImGuiCol_TitleBgActive alpha channel.
+    w = 1.0
+# ImGuiCol_TitleBgActive red channel.
+    x = 0.15999999642372131
+# ImGuiCol_TitleBgActive green channel.
+    y = 0.28999999165534973
+# ImGuiCol_TitleBgActive blue channel.
+    z = 0.47999998927116394
+
+# style.colors[12] = ImGuiCol_TitleBgCollapsed
+    [[style.colors]]
+# ImGuiCol_TitleBgCollapsed alpha channel.
+    w = 0.50999999046325684
+# ImGuiCol_TitleBgCollapsed red channel.
+    x = 0.0
+# ImGuiCol_TitleBgCollapsed green channel.
+    y = 0.0
+# ImGuiCol_TitleBgCollapsed blue channel.
+    z = 0.0
+
+# style.colors[13] = ImGuiCol_MenuBarBg
+    [[style.colors]]
+# ImGuiCol_MenuBarBg alpha channel.
+    w = 1.0
+# ImGuiCol_MenuBarBg red channel.
+    x = 0.14000000059604645
+# ImGuiCol_MenuBarBg green channel.
+    y = 0.14000000059604645
+# ImGuiCol_MenuBarBg blue channel.
+    z = 0.14000000059604645
+
+# style.colors[14] = ImGuiCol_ScrollbarBg
+    [[style.colors]]
+# ImGuiCol_ScrollbarBg alpha channel.
+    w = 0.52999997138977051
+# ImGuiCol_ScrollbarBg red channel.
+    x = 0.019999999552965164
+# ImGuiCol_ScrollbarBg green channel.
+    y = 0.019999999552965164
+# ImGuiCol_ScrollbarBg blue channel.
+    z = 0.019999999552965164
+
+# style.colors[15] = ImGuiCol_ScrollbarGrab
+    [[style.colors]]
+# ImGuiCol_ScrollbarGrab alpha channel.
+    w = 1.0
+# ImGuiCol_ScrollbarGrab red channel.
+    x = 0.31000000238418579
+# ImGuiCol_ScrollbarGrab green channel.
+    y = 0.31000000238418579
+# ImGuiCol_ScrollbarGrab blue channel.
+    z = 0.31000000238418579
+
+# style.colors[16] = ImGuiCol_ScrollbarGrabHovered
+    [[style.colors]]
+# ImGuiCol_ScrollbarGrabHovered alpha channel.
+    w = 1.0
+# ImGuiCol_ScrollbarGrabHovered red channel.
+    x = 0.40999999642372131
+# ImGuiCol_ScrollbarGrabHovered green channel.
+    y = 0.40999999642372131
+# ImGuiCol_ScrollbarGrabHovered blue channel.
+    z = 0.40999999642372131
+
+# style.colors[17] = ImGuiCol_ScrollbarGrabActive
+    [[style.colors]]
+# ImGuiCol_ScrollbarGrabActive alpha channel.
+    w = 1.0
+# ImGuiCol_ScrollbarGrabActive red channel.
+    x = 0.50999999046325684
+# ImGuiCol_ScrollbarGrabActive green channel.
+    y = 0.50999999046325684
+# ImGuiCol_ScrollbarGrabActive blue channel.
+    z = 0.50999999046325684
+
+# style.colors[18] = ImGuiCol_CheckMark
+    [[style.colors]]
+# ImGuiCol_CheckMark alpha channel.
+    w = 1.0
+# ImGuiCol_CheckMark red channel.
+    x = 0.25999999046325684
+# ImGuiCol_CheckMark green channel.
+    y = 0.5899999737739563
+# ImGuiCol_CheckMark blue channel.
+    z = 0.98000001907348633
+
+# style.colors[19] = ImGuiCol_SliderGrab
+    [[style.colors]]
+# ImGuiCol_SliderGrab alpha channel.
+    w = 1.0
+# ImGuiCol_SliderGrab red channel.
+    x = 0.23999999463558197
+# ImGuiCol_SliderGrab green channel.
+    y = 0.51999998092651367
+# ImGuiCol_SliderGrab blue channel.
+    z = 0.87999999523162842
+
+# style.colors[20] = ImGuiCol_SliderGrabActive
+    [[style.colors]]
+# ImGuiCol_SliderGrabActive alpha channel.
+    w = 1.0
+# ImGuiCol_SliderGrabActive red channel.
+    x = 0.25999999046325684
+# ImGuiCol_SliderGrabActive green channel.
+    y = 0.5899999737739563
+# ImGuiCol_SliderGrabActive blue channel.
+    z = 0.98000001907348633
+
+# style.colors[21] = ImGuiCol_Button
+    [[style.colors]]
+# ImGuiCol_Button alpha channel.
+    w = 0.40000000596046448
+# ImGuiCol_Button red channel.
+    x = 0.25999999046325684
+# ImGuiCol_Button green channel.
+    y = 0.5899999737739563
+# ImGuiCol_Button blue channel.
+    z = 0.98000001907348633
+
+# style.colors[22] = ImGuiCol_ButtonHovered
+    [[style.colors]]
+# ImGuiCol_ButtonHovered alpha channel.
+    w = 1.0
+# ImGuiCol_ButtonHovered red channel.
+    x = 0.25999999046325684
+# ImGuiCol_ButtonHovered green channel.
+    y = 0.5899999737739563
+# ImGuiCol_ButtonHovered blue channel.
+    z = 0.98000001907348633
+
+# style.colors[23] = ImGuiCol_ButtonActive
+    [[style.colors]]
+# ImGuiCol_ButtonActive alpha channel.
+    w = 1.0
+# ImGuiCol_ButtonActive red channel.
+    x = 0.059999998658895493
+# ImGuiCol_ButtonActive green channel.
+    y = 0.52999997138977051
+# ImGuiCol_ButtonActive blue channel.
+    z = 0.98000001907348633
+
+# style.colors[24] = ImGuiCol_Header
+    [[style.colors]]
+# ImGuiCol_Header alpha channel.
+    w = 0.31000000238418579
+# ImGuiCol_Header red channel.
+    x = 0.25999999046325684
+# ImGuiCol_Header green channel.
+    y = 0.5899999737739563
+# ImGuiCol_Header blue channel.
+    z = 0.98000001907348633
+
+# style.colors[25] = ImGuiCol_HeaderHovered
+    [[style.colors]]
+# ImGuiCol_HeaderHovered alpha channel.
+    w = 0.80000001192092896
+# ImGuiCol_HeaderHovered red channel.
+    x = 0.25999999046325684
+# ImGuiCol_HeaderHovered green channel.
+    y = 0.5899999737739563
+# ImGuiCol_HeaderHovered blue channel.
+    z = 0.98000001907348633
+
+# style.colors[26] = ImGuiCol_HeaderActive
+    [[style.colors]]
+# ImGuiCol_HeaderActive alpha channel.
+    w = 1.0
+# ImGuiCol_HeaderActive red channel.
+    x = 0.25999999046325684
+# ImGuiCol_HeaderActive green channel.
+    y = 0.5899999737739563
+# ImGuiCol_HeaderActive blue channel.
+    z = 0.98000001907348633
+
+# style.colors[27] = ImGuiCol_Separator
+    [[style.colors]]
+# ImGuiCol_Separator alpha channel.
+    w = 0.5
+# ImGuiCol_Separator red channel.
+    x = 0.43000000715255737
+# ImGuiCol_Separator green channel.
+    y = 0.43000000715255737
+# ImGuiCol_Separator blue channel.
+    z = 0.5
+
+# style.colors[28] = ImGuiCol_SeparatorHovered
+    [[style.colors]]
+# ImGuiCol_SeparatorHovered alpha channel.
+    w = 0.77999997138977051
+# ImGuiCol_SeparatorHovered red channel.
+    x = 0.10000000149011612
+# ImGuiCol_SeparatorHovered green channel.
+    y = 0.40000000596046448
+# ImGuiCol_SeparatorHovered blue channel.
+    z = 0.75
+
+# style.colors[29] = ImGuiCol_SeparatorActive
+    [[style.colors]]
+# ImGuiCol_SeparatorActive alpha channel.
+    w = 1.0
+# ImGuiCol_SeparatorActive red channel.
+    x = 0.10000000149011612
+# ImGuiCol_SeparatorActive green channel.
+    y = 0.40000000596046448
+# ImGuiCol_SeparatorActive blue channel.
+    z = 0.75
+
+# style.colors[30] = ImGuiCol_ResizeGrip
+    [[style.colors]]
+# ImGuiCol_ResizeGrip alpha channel.
+    w = 0.20000000298023224
+# ImGuiCol_ResizeGrip red channel.
+    x = 0.25999999046325684
+# ImGuiCol_ResizeGrip green channel.
+    y = 0.5899999737739563
+# ImGuiCol_ResizeGrip blue channel.
+    z = 0.98000001907348633
+
+# style.colors[31] = ImGuiCol_ResizeGripHovered
+    [[style.colors]]
+# ImGuiCol_ResizeGripHovered alpha channel.
+    w = 0.67000001668930054
+# ImGuiCol_ResizeGripHovered red channel.
+    x = 0.25999999046325684
+# ImGuiCol_ResizeGripHovered green channel.
+    y = 0.5899999737739563
+# ImGuiCol_ResizeGripHovered blue channel.
+    z = 0.98000001907348633
+
+# style.colors[32] = ImGuiCol_ResizeGripActive
+    [[style.colors]]
+# ImGuiCol_ResizeGripActive alpha channel.
+    w = 0.94999998807907104
+# ImGuiCol_ResizeGripActive red channel.
+    x = 0.25999999046325684
+# ImGuiCol_ResizeGripActive green channel.
+    y = 0.5899999737739563
+# ImGuiCol_ResizeGripActive blue channel.
+    z = 0.98000001907348633
+
+# style.colors[33] = ImGuiCol_InputTextCursor
+    [[style.colors]]
+# ImGuiCol_InputTextCursor alpha channel.
+    w = 1.0
+# ImGuiCol_InputTextCursor red channel.
+    x = 1.0
+# ImGuiCol_InputTextCursor green channel.
+    y = 1.0
+# ImGuiCol_InputTextCursor blue channel.
+    z = 1.0
+
+# style.colors[34] = ImGuiCol_TabHovered
+    [[style.colors]]
+# ImGuiCol_TabHovered alpha channel.
+    w = 0.80000001192092896
+# ImGuiCol_TabHovered red channel.
+    x = 0.25999999046325684
+# ImGuiCol_TabHovered green channel.
+    y = 0.5899999737739563
+# ImGuiCol_TabHovered blue channel.
+    z = 0.98000001907348633
+
+# style.colors[35] = ImGuiCol_Tab
+    [[style.colors]]
+# ImGuiCol_Tab alpha channel.
+    w = 0.8619999885559082
+# ImGuiCol_Tab red channel.
+    x = 0.17999999225139618
+# ImGuiCol_Tab green channel.
+    y = 0.34999996423721313
+# ImGuiCol_Tab blue channel.
+    z = 0.58000004291534424
+
+# style.colors[36] = ImGuiCol_TabSelected
+    [[style.colors]]
+# ImGuiCol_TabSelected alpha channel.
+    w = 1.0
+# ImGuiCol_TabSelected red channel.
+    x = 0.19999998807907104
+# ImGuiCol_TabSelected green channel.
+    y = 0.40999996662139893
+# ImGuiCol_TabSelected blue channel.
+    z = 0.68000000715255737
+
+# style.colors[37] = ImGuiCol_TabSelectedOverline
+    [[style.colors]]
+# ImGuiCol_TabSelectedOverline alpha channel.
+    w = 1.0
+# ImGuiCol_TabSelectedOverline red channel.
+    x = 0.25999999046325684
+# ImGuiCol_TabSelectedOverline green channel.
+    y = 0.5899999737739563
+# ImGuiCol_TabSelectedOverline blue channel.
+    z = 0.98000001907348633
+
+# style.colors[38] = ImGuiCol_TabDimmed
+    [[style.colors]]
+# ImGuiCol_TabDimmed alpha channel.
+    w = 0.9724000096321106
+# ImGuiCol_TabDimmed red channel.
+    x = 0.068000003695487976
+# ImGuiCol_TabDimmed green channel.
+    y = 0.10199998319149017
+# ImGuiCol_TabDimmed blue channel.
+    z = 0.14800003170967102
+
+# style.colors[39] = ImGuiCol_TabDimmedSelected
+    [[style.colors]]
+# ImGuiCol_TabDimmedSelected alpha channel.
+    w = 1.0
+# ImGuiCol_TabDimmedSelected red channel.
+    x = 0.13599997758865356
+# ImGuiCol_TabDimmedSelected green channel.
+    y = 0.26199996471405029
+# ImGuiCol_TabDimmedSelected blue channel.
+    z = 0.42399999499320984
+
+# style.colors[40] = ImGuiCol_TabDimmedSelectedOverline
+    [[style.colors]]
+# ImGuiCol_TabDimmedSelectedOverline alpha channel.
+    w = 0.0
+# ImGuiCol_TabDimmedSelectedOverline red channel.
+    x = 0.5
+# ImGuiCol_TabDimmedSelectedOverline green channel.
+    y = 0.5
+# ImGuiCol_TabDimmedSelectedOverline blue channel.
+    z = 0.5
+
+# style.colors[41] = ImGuiCol_PlotLines
+    [[style.colors]]
+# ImGuiCol_PlotLines alpha channel.
+    w = 1.0
+# ImGuiCol_PlotLines red channel.
+    x = 0.61000001430511475
+# ImGuiCol_PlotLines green channel.
+    y = 0.61000001430511475
+# ImGuiCol_PlotLines blue channel.
+    z = 0.61000001430511475
+
+# style.colors[42] = ImGuiCol_PlotLinesHovered
+    [[style.colors]]
+# ImGuiCol_PlotLinesHovered alpha channel.
+    w = 1.0
+# ImGuiCol_PlotLinesHovered red channel.
+    x = 1.0
+# ImGuiCol_PlotLinesHovered green channel.
+    y = 0.43000000715255737
+# ImGuiCol_PlotLinesHovered blue channel.
+    z = 0.34999999403953552
+
+# style.colors[43] = ImGuiCol_PlotHistogram
+    [[style.colors]]
+# ImGuiCol_PlotHistogram alpha channel.
+    w = 1.0
+# ImGuiCol_PlotHistogram red channel.
+    x = 0.89999997615814209
+# ImGuiCol_PlotHistogram green channel.
+    y = 0.69999998807907104
+# ImGuiCol_PlotHistogram blue channel.
+    z = 0.0
+
+# style.colors[44] = ImGuiCol_PlotHistogramHovered
+    [[style.colors]]
+# ImGuiCol_PlotHistogramHovered alpha channel.
+    w = 1.0
+# ImGuiCol_PlotHistogramHovered red channel.
+    x = 1.0
+# ImGuiCol_PlotHistogramHovered green channel.
+    y = 0.60000002384185791
+# ImGuiCol_PlotHistogramHovered blue channel.
+    z = 0.0
+
+# style.colors[45] = ImGuiCol_TableHeaderBg
+    [[style.colors]]
+# ImGuiCol_TableHeaderBg alpha channel.
+    w = 1.0
+# ImGuiCol_TableHeaderBg red channel.
+    x = 0.18999999761581421
+# ImGuiCol_TableHeaderBg green channel.
+    y = 0.18999999761581421
+# ImGuiCol_TableHeaderBg blue channel.
+    z = 0.20000000298023224
+
+# style.colors[46] = ImGuiCol_TableBorderStrong
+    [[style.colors]]
+# ImGuiCol_TableBorderStrong alpha channel.
+    w = 1.0
+# ImGuiCol_TableBorderStrong red channel.
+    x = 0.31000000238418579
+# ImGuiCol_TableBorderStrong green channel.
+    y = 0.31000000238418579
+# ImGuiCol_TableBorderStrong blue channel.
+    z = 0.34999999403953552
+
+# style.colors[47] = ImGuiCol_TableBorderLight
+    [[style.colors]]
+# ImGuiCol_TableBorderLight alpha channel.
+    w = 1.0
+# ImGuiCol_TableBorderLight red channel.
+    x = 0.23000000417232513
+# ImGuiCol_TableBorderLight green channel.
+    y = 0.23000000417232513
+# ImGuiCol_TableBorderLight blue channel.
+    z = 0.25
+
+# style.colors[48] = ImGuiCol_TableRowBg
+    [[style.colors]]
+# ImGuiCol_TableRowBg alpha channel.
+    w = 0.0
+# ImGuiCol_TableRowBg red channel.
+    x = 0.0
+# ImGuiCol_TableRowBg green channel.
+    y = 0.0
+# ImGuiCol_TableRowBg blue channel.
+    z = 0.0
+
+# style.colors[49] = ImGuiCol_TableRowBgAlt
+    [[style.colors]]
+# ImGuiCol_TableRowBgAlt alpha channel.
+    w = 0.059999998658895493
+# ImGuiCol_TableRowBgAlt red channel.
+    x = 1.0
+# ImGuiCol_TableRowBgAlt green channel.
+    y = 1.0
+# ImGuiCol_TableRowBgAlt blue channel.
+    z = 1.0
+
+# style.colors[50] = ImGuiCol_TextLink
+    [[style.colors]]
+# ImGuiCol_TextLink alpha channel.
+    w = 1.0
+# ImGuiCol_TextLink red channel.
+    x = 0.25999999046325684
+# ImGuiCol_TextLink green channel.
+    y = 0.5899999737739563
+# ImGuiCol_TextLink blue channel.
+    z = 0.98000001907348633
+
+# style.colors[51] = ImGuiCol_TextSelectedBg
+    [[style.colors]]
+# ImGuiCol_TextSelectedBg alpha channel.
+    w = 0.34999999403953552
+# ImGuiCol_TextSelectedBg red channel.
+    x = 0.25999999046325684
+# ImGuiCol_TextSelectedBg green channel.
+    y = 0.5899999737739563
+# ImGuiCol_TextSelectedBg blue channel.
+    z = 0.98000001907348633
+
+# style.colors[52] = ImGuiCol_TreeLines
+    [[style.colors]]
+# ImGuiCol_TreeLines alpha channel.
+    w = 0.5
+# ImGuiCol_TreeLines red channel.
+    x = 0.43000000715255737
+# ImGuiCol_TreeLines green channel.
+    y = 0.43000000715255737
+# ImGuiCol_TreeLines blue channel.
+    z = 0.5
+
+# style.colors[53] = ImGuiCol_DragDropTarget
+    [[style.colors]]
+# ImGuiCol_DragDropTarget alpha channel.
+    w = 0.89999997615814209
+# ImGuiCol_DragDropTarget red channel.
+    x = 1.0
+# ImGuiCol_DragDropTarget green channel.
+    y = 1.0
+# ImGuiCol_DragDropTarget blue channel.
+    z = 0.0
+
+# style.colors[54] = ImGuiCol_DragDropTargetBg
+    [[style.colors]]
+# ImGuiCol_DragDropTargetBg alpha channel.
+    w = 0.0
+# ImGuiCol_DragDropTargetBg red channel.
+    x = 0.0
+# ImGuiCol_DragDropTargetBg green channel.
+    y = 0.0
+# ImGuiCol_DragDropTargetBg blue channel.
+    z = 0.0
+
+# style.colors[55] = ImGuiCol_UnsavedMarker
+    [[style.colors]]
+# ImGuiCol_UnsavedMarker alpha channel.
+    w = 1.0
+# ImGuiCol_UnsavedMarker red channel.
+    x = 1.0
+# ImGuiCol_UnsavedMarker green channel.
+    y = 1.0
+# ImGuiCol_UnsavedMarker blue channel.
+    z = 1.0
+
+# style.colors[56] = ImGuiCol_NavCursor
+    [[style.colors]]
+# ImGuiCol_NavCursor alpha channel.
+    w = 1.0
+# ImGuiCol_NavCursor red channel.
+    x = 0.25999999046325684
+# ImGuiCol_NavCursor green channel.
+    y = 0.5899999737739563
+# ImGuiCol_NavCursor blue channel.
+    z = 0.98000001907348633
+
+# style.colors[57] = ImGuiCol_NavWindowingHighlight
+    [[style.colors]]
+# ImGuiCol_NavWindowingHighlight alpha channel.
+    w = 0.69999998807907104
+# ImGuiCol_NavWindowingHighlight red channel.
+    x = 1.0
+# ImGuiCol_NavWindowingHighlight green channel.
+    y = 1.0
+# ImGuiCol_NavWindowingHighlight blue channel.
+    z = 1.0
+
+# style.colors[58] = ImGuiCol_NavWindowingDimBg
+    [[style.colors]]
+# ImGuiCol_NavWindowingDimBg alpha channel.
+    w = 0.20000000298023224
+# ImGuiCol_NavWindowingDimBg red channel.
+    x = 0.80000001192092896
+# ImGuiCol_NavWindowingDimBg green channel.
+    y = 0.80000001192092896
+# ImGuiCol_NavWindowingDimBg blue channel.
+    z = 0.80000001192092896
+
+# style.colors[59] = ImGuiCol_ModalWindowDimBg
+    [[style.colors]]
+# ImGuiCol_ModalWindowDimBg alpha channel.
+    w = 0.34999999403953552
+# ImGuiCol_ModalWindowDimBg red channel.
+    x = 0.80000001192092896
+# ImGuiCol_ModalWindowDimBg green channel.
+    y = 0.80000001192092896
+# ImGuiCol_ModalWindowDimBg blue channel.
+    z = 0.80000001192092896
+
+# Style Editor window rectangle.
+[style_editor_window]
+# Window height in pixels.
+h = 0.0
+# True if this saved rectangle should be applied.
+valid = false
+# Window width in pixels.
+w = 0.0
+# Window left position in pixels.
+x = 0.0
+# Window top position in pixels.
+y = 0.0
+
+# Terminals window rectangle.
+[terminals_window]
+# Window height in pixels.
+h = 480.0
+# True if this saved rectangle should be applied.
+valid = true
+# Window width in pixels.
+w = 800.0
+# Window left position in pixels.
+x = 280.0
+# Window top position in pixels.
+y = 436.0
