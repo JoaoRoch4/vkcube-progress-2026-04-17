@@ -30,6 +30,11 @@ pkg_check_modules(LIBDRM    REQUIRED IMPORTED_TARGET libdrm)
 pkg_check_modules(GBM       REQUIRED IMPORTED_TARGET gbm)
 pkg_check_modules(LIBPNG    REQUIRED IMPORTED_TARGET libpng)
 
+if(EXISTS "/home/joao/vcpkg/installed/x64-linux")
+    list(APPEND CMAKE_PREFIX_PATH "/home/joao/vcpkg/installed/x64-linux")
+endif()
+find_package(reflectcpp CONFIG REQUIRED)
+
 find_library(MATH_LIB m)
 
 # ── SPIR-V shader compilation ─────────────────────────────────────────────────
@@ -40,14 +45,14 @@ file(MAKE_DIRECTORY "${SPIRV_OUTPUT_DIR}")
 
 add_custom_command(
     OUTPUT  "${SPIRV_OUTPUT_DIR}/vkcube.vert.spv.h"
-    COMMAND ${GLSLANG} "${CMAKE_CURRENT_SOURCE_DIR}/vkcube.vert" -V -x -o "${SPIRV_OUTPUT_DIR}/vkcube.vert.spv.h"
-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/vkcube.vert"
+    COMMAND ${GLSLANG} "${APP_DIR}/renderer/vulkan/shaders/vkcube.vert" -V -x -o "${SPIRV_OUTPUT_DIR}/vkcube.vert.spv.h"
+    DEPENDS "${APP_DIR}/renderer/vulkan/shaders/vkcube.vert"
     COMMENT "Compiling vkcube.vert → SPIR-V header"
 )
 add_custom_command(
     OUTPUT  "${SPIRV_OUTPUT_DIR}/vkcube.frag.spv.h"
-    COMMAND ${GLSLANG} "${CMAKE_CURRENT_SOURCE_DIR}/vkcube.frag" -V -x -o "${SPIRV_OUTPUT_DIR}/vkcube.frag.spv.h"
-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/vkcube.frag"
+    COMMAND ${GLSLANG} "${APP_DIR}/renderer/vulkan/shaders/vkcube.frag" -V -x -o "${SPIRV_OUTPUT_DIR}/vkcube.frag.spv.h"
+    DEPENDS "${APP_DIR}/renderer/vulkan/shaders/vkcube.frag"
     COMMENT "Compiling vkcube.frag → SPIR-V header"
 )
 add_custom_target(spirv_headers
@@ -88,15 +93,23 @@ set(APP_SOURCES
     ${APP_DIR}/renderer/vulkan/vulkan_emoji_atlas.cpp
     ${APP_DIR}/ui/emoji_atlas.cpp
     ${APP_DIR}/ui/imgui_layer.cpp
+    ${APP_DIR}/ui/style_editor.cpp
+    ${APP_DIR}/ui/ui_windows.cpp
     ${APP_DIR}/ui/imgui_console.cpp
+    ${APP_DIR}/ui/main_menu_bar.cpp
     ${APP_DIR}/ui/test_engine_layer.cpp
+    ${APP_DIR}/ui/window_state_toml.cpp
+    ${APP_DIR}/hot_loader.cpp
+    ${APP_DIR}/renderer/vulkan/vulkan_context_with_cube.cpp
+    ${APP_DIR}/ui/app_windows.cpp
+    ${APP_DIR}/app.cpp
 )
 
 # ── Executable ────────────────────────────────────────────────────────────────
 add_executable(vkcube
     main.cpp
-    cube_renderer.cpp
-    esTransform.c
+    ${APP_DIR}/renderer/vulkan/cube_renderer.cpp
+    ${APP_DIR}/renderer/vulkan/esTransform.c
     ${APP_SOURCES}
     ${IMGUI_CORE_SOURCES}
     ${IMGUI_TE_SOURCES}
@@ -129,6 +142,7 @@ target_link_libraries(vkcube PRIVATE
     PkgConfig::GBM
     PkgConfig::LIBPNG
     Vulkan::Vulkan
+    reflectcpp::reflectcpp
     ${MATH_LIB}
     ${CMAKE_DL_LIBS}
     pthread

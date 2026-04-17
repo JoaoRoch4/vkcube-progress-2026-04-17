@@ -1,0 +1,12 @@
+{
+    "name": "vkcube-progress-2026-04-17",
+    "version-string": "0.1.0",
+    "dependencies": [
+        {
+            "name": "reflectcpp",
+            "features": [
+                "toml"
+            ]
+        }
+    ]
+}

@@ -1,2 +1,0 @@
-option('xcb', type : 'combo', choices : ['auto', 'true', 'false'], value : 'auto')
-option('wayland', type : 'combo', choices : ['auto', 'true', 'false'], value : 'auto')

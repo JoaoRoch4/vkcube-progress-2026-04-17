@@ -8,7 +8,7 @@
     "cmake.generator": "Unix Makefiles",
     "editor.formatOnSave": true,
     "clangd.arguments": [
-        "--compile-commands-dir=${workspaceFolder}/cmake-build",
+        "--compile-commands-dir=cmake-build",
         "--clang-tidy",
         "--background-index"
     ]

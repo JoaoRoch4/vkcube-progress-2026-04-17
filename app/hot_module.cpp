@@ -26,11 +26,11 @@ void hot_init_fn(ImGuiContext* ctx)
 	std::println("[hot] module loaded");
 }
 
-void hot_build_ui_fn()
+void hot_build_ui_fn(bool* p_open)
 {
 	ImGui::SetNextWindowSize(ImVec2(360, 160), ImGuiCond_Appearing);
 	ImGui::SetNextWindowPos(ImVec2(540, 380), ImGuiCond_Appearing);
-	if (ImGui::Begin("Hot Module [v2] \xf0\x9f\x94\xa5")) {
+	if (ImGui::Begin("Hot Module [v2] \xf0\x9f\x94\xa5", p_open)) {
 		ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.4f, 1.0f), "Hot reload works!");
 		ImGui::Separator();
 		ImGui::Text("Counter: %d", s_counter);

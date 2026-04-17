@@ -11,6 +11,7 @@ Diagnostics:
   UnusedIncludes: None
 
 CompileFlags:
+  CompilationDatabase: cmake-build
   # Add flags to the compile command
   Add:
     - -Wunused-variable
@@ -25,4 +26,21 @@ CompileFlags:
     - -Wunused-label
     - -Wunused-lambda-capture
 
+---
+If:
+  PathMatch: app/renderer/vulkan/shaders/.*\.spv\.h\.in$
+Diagnostics:
+  Suppress:
+    - "*"
+
+---
+If:
+  PathMatch: app/renderer/vulkan/vulkan_context_with_cube\.cpp$
+Diagnostics:
+  Suppress:
+    - "*"
+---
+Hover:
+  ShowAKA: true
+  MacroContentsLimit: 0
 # Press Ctrl+Space to bring up completion suggestions
