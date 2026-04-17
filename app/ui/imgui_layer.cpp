@@ -1,0 +1,297 @@
+#include "imgui_layer.hpp"
+#include "emoji_atlas.hpp"
+#include "imgui_freetype.h"
+
+#include <array>
+#include <format>
+#include <string>
+
+ImGuiLayer::ImGuiLayer()
+    : ShowDemoWindow{true}
+    , ShowAnotherWindow{false}
+    , ShowDebugLogMirrorWindow{true}
+    , ShowTerminalWindow{true}
+    , ShowTestEngineWindow{true}
+    , ShowEmojiAtlasWindow{true}
+    , RequestQuit{false}
+    , ClearColor{0.45f, 0.55f, 0.60f, 1.00f}
+{}
+
+ImGuiLayer::TerminalTab::TerminalTab()
+    : open{true}
+{}
+
+void ImGuiLayer::Init(SDL_Window* window, ImGui_ImplVulkan_InitInfo& init_info, float main_scale)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsLight();
+
+    // Bake a fixed style / DPI scale (see docs/FONTS.md for dynamic per-monitor scaling).
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.ScaleAllSizes(main_scale);
+    style.FontScaleDpi = main_scale;
+
+    ImGui_ImplSDL3_InitForVulkan(window);
+    ImGui_ImplVulkan_Init(&init_info);
+
+    // Start mirroring the debug log to a file (follow with: tail -f /tmp/imgui_debug.log)
+    DebugLogMirror.Open("/tmp/imgui_debug.log");
+
+    // Create the initial terminal tab (wires all callbacks internally).
+    AddTerminal("Terminal 1");
+    // Uncomment to enable specific log categories, e.g.:
+    // ImGuiDebugLogMirror::SetFlags(ImGuiDebugLogFlags_EventError | ImGuiDebugLogFlags_EventActiveId);
+
+    // Load fonts — see docs/FONTS.md.
+    // Using 1.92 dynamic font system (no glyph ranges required).
+    // Prerequisites already enabled in imconfig.h:
+    //   IMGUI_USE_WCHAR32                  — codepoints > 0xFFFF (emoji)
+    //   IMGUI_ENABLE_FREETYPE              — FreeType rasterizer
+    //   IMGUI_ENABLE_FREETYPE_PLUTOSVG     — COLRv1 color emoji via PlutoSVG
+    style.FontSizeBase = 20.0f;
+
+    // 1. Primary: NotoSans — solid Latin, Greek, Cyrillic, Arabic, Hebrew …
+    io.Fonts->AddFontFromFileTTF("/usr/share/fonts/google-noto/NotoSans-Regular.ttf");
+
+    // 2. Merge CJK (Chinese, Japanese, Korean) into the same font slot.
+    {
+        ImFontConfig cfg;
+        cfg.MergeMode = true;
+        io.Fonts->AddFontFromFileTTF(
+            "/home/joao/.local/share/fonts/google/NotoSansSC[wght].ttf",
+            0.0f, &cfg);
+    }
+
+    // 3. Merge Arabic (covers Arabic script + Arabic Presentation Forms U+FE70-U+FEFF).
+    {
+        ImFontConfig cfg;
+        cfg.MergeMode = true;
+        io.Fonts->AddFontFromFileTTF(
+            "/home/joao/.local/share/fonts/google/NotoSansArabic[wdth,wght].ttf",
+            0.0f, &cfg);
+    }
+
+    // 4. Merge Mathematical symbols — covers Mathematical Alphanumeric Symbols
+    //    (U+1D400–U+1D7FF): Fraktur, Script, Double-struck, etc.
+    {
+        ImFontConfig cfg;
+        cfg.MergeMode = true;
+        io.Fonts->AddFontFromFileTTF(
+            "/home/joao/.local/share/fonts/google/NotoSansMath-Regular.ttf",
+            0.0f, &cfg);
+    }
+
+    // 5. Merge Symbols & Symbols 2 — covers rare/historic scripts, ꙮ, etc.
+    {
+        ImFontConfig cfg;
+        cfg.MergeMode = true;
+        io.Fonts->AddFontFromFileTTF(
+            "/home/joao/.local/share/fonts/google/NotoSansSymbols2-Regular.ttf",
+            0.0f, &cfg);
+    }
+
+    // 6. Merge color emoji.
+    //    Requires IMGUI_USE_WCHAR32 + IMGUI_ENABLE_FREETYPE + LoadColor.
+    //    PlutoSVG (IMGUI_ENABLE_FREETYPE_PLUTOSVG) handles COLRv1/SVG outlines.
+    {
+        ImFontConfig cfg;
+        cfg.MergeMode       = true;
+        cfg.FontLoaderFlags = ImGuiFreeTypeLoaderFlags_LoadColor;
+        io.Fonts->AddFontFromFileTTF(
+            "/home/joao/.local/share/fonts/google/NotoColorEmoji-Regular.ttf",
+            0.0f, &cfg);
+    }
+}
+
+void ImGuiLayer::WireTerminalCallbacks(ConsoleCommands& c)
+{
+    c.OnDemoToggle  = [this](bool show) { ShowDemoWindow = show; };
+    c.OnStyleChange = [](int) { /* style already applied in-place by CmdStyle */ };
+    c.OnQuit        = [this]()           { RequestQuit = true; };
+}
+
+void ImGuiLayer::AddTerminal(const char* name)
+{
+    TerminalTab t;
+    t.name    = name ? name : ("Terminal " + std::to_string(Terminals.size() + 1));
+    t.console = std::make_unique<ConsoleCommands>();
+    t.console->SetEmojiAtlas(EmojiAtlasView);
+    WireTerminalCallbacks(*t.console);
+    Terminals.push_back(std::move(t));
+}
+
+void ImGuiLayer::SetEmojiAtlas(const EmojiAtlas* atlas)
+{
+    EmojiAtlasView = atlas;
+    for (TerminalTab& terminal : Terminals)
+        terminal.console->SetEmojiAtlas(atlas);
+}
+
+void ImGuiLayer::DrawTerminals()
+{
+    ImGui::SetNextWindowSize(ImVec2(800, 500), ImGuiCond_FirstUseEver);
+    if (!ImGui::Begin("Terminals", &ShowTerminalWindow))
+    {
+        ImGui::End();
+        return;
+    }
+    if (ImGui::BeginTabBar("##termtabs"))
+    {
+        for (int i = 0; i < static_cast<int>(Terminals.size()); )
+        {
+            TerminalTab& t = Terminals.at(i);
+            bool open = t.open;
+            std::string label = std::format("{}##tab{}", t.name, i);
+            if (ImGui::BeginTabItem(label.c_str(), &open))
+            {
+                std::string id = std::format("{}", i);
+                t.console->DrawContents(id.c_str());
+                ImGui::EndTabItem();
+            }
+            t.open = open;
+            if (!open)
+                Terminals.erase(Terminals.begin() + i);
+            else
+                ++i;
+        }
+        // "+" button appends a new terminal tab.
+        if (ImGui::TabItemButton("+", ImGuiTabItemFlags_Trailing))
+            AddTerminal();
+        ImGui::EndTabBar();
+    }
+    ImGui::End();
+}
+
+void ImGuiLayer::DrawEmojiAtlasWindow()
+{
+    if (EmojiAtlasView == nullptr)
+        return;
+
+    ImGui::SetNextWindowSize(ImVec2(420.0f, 260.0f), ImGuiCond_FirstUseEver);
+    if (!ImGui::Begin("Emoji Atlas", &ShowEmojiAtlasWindow))
+    {
+        ImGui::End();
+        return;
+    }
+
+    ImGui::Text("Merged text path:");
+    ImGui::TextUnformatted("\xF0\x9F\x8C\x9F  \xF0\x9F\x9A\x80");
+    ImGui::Separator();
+
+    struct EmojiSample {
+        ImWchar     codepoint;
+        const char* label;
+    };
+    const std::array<EmojiSample, 2> samples {{
+        { static_cast<ImWchar>(0x1F31F), "U+1F31F glowing star" },
+        { static_cast<ImWchar>(0x1F680), "U+1F680 rocket" },
+    }};
+
+    for (const EmojiSample& sample : samples)
+    {
+        ImGui::TextUnformatted(sample.label);
+        const EmojiAtlas::GlyphEntry* glyph = EmojiAtlasView->LookupGlyph(sample.codepoint);
+        if (glyph == nullptr)
+        {
+            ImGui::TextUnformatted("Atlas glyph missing");
+            continue;
+        }
+
+        const ImVec2 image_size {
+            static_cast<float>(glyph->RenderW) * 2.0f,
+            static_cast<float>(glyph->RenderH) * 2.0f,
+        };
+        ImGui::Image(EmojiAtlasView->GetTextureRef(), image_size,
+                     ImVec2(glyph->U0, glyph->V0), ImVec2(glyph->U1, glyph->V1));
+        ImGui::SameLine();
+        ImGui::Text("%dx%d", glyph->RenderW, glyph->RenderH);
+    }
+
+    ImGui::Separator();
+    ImGui::Text("Atlas size: %d x %d", EmojiAtlasView->AtlasWidth(), EmojiAtlasView->AtlasHeight());
+    ImGui::End();
+}
+
+void ImGuiLayer::Shutdown()
+{
+    DebugLogMirror.Close();
+    ImGui_ImplVulkan_Shutdown();
+    ImGui_ImplSDL3_Shutdown();
+    ImGui::DestroyContext();
+}
+
+void ImGuiLayer::ProcessEvent(const SDL_Event* event)
+{
+    ImGui_ImplSDL3_ProcessEvent(event);
+}
+
+void ImGuiLayer::NewFrame()
+{
+    ImGui_ImplVulkan_NewFrame();
+    ImGui_ImplSDL3_NewFrame();
+    ImGui::NewFrame();
+    DebugLogMirror.Tick();  // append any new debug-log bytes to /tmp/imgui_debug.log
+}
+
+void ImGuiLayer::BuildUI()
+{
+    // 1. Show the big demo window.
+    if (ShowDemoWindow)
+        ImGui::ShowDemoWindow(&ShowDemoWindow);
+
+    // 2. Show a simple window that we create ourselves.
+    {
+        static float f       = 0.0f;
+        static int   counter = 0;
+
+        ImGui::Begin("Hello, world!");
+        ImGui::Text("This is some useful text.");
+        ImGui::Checkbox("Demo Window",    &ShowDemoWindow);
+        ImGui::Checkbox("Another Window", &ShowAnotherWindow);
+        ImGui::Checkbox("Debug Log",      &ShowDebugLogMirrorWindow);
+        ImGui::Checkbox("Terminals",        &ShowTerminalWindow);
+        ImGui::Checkbox("Test Engine",    &ShowTestEngineWindow);
+        ImGui::Checkbox("Emoji Atlas",    &ShowEmojiAtlasWindow);
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+        ImGui::ColorEdit3("clear color", &ClearColor.x);
+        if (ImGui::Button("Button"))
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text("counter = %d", counter);
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+                    1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::End();
+    }
+
+    // 3. Debug log mirror window (toggle with the "Debug Log" button below).
+    if (ShowDebugLogMirrorWindow)
+        DebugLogMirror.ShowWindow(&ShowDebugLogMirrorWindow);
+
+    // 4. Terminal window.
+    if (ShowTerminalWindow)
+        DrawTerminals();
+
+    if (ShowEmojiAtlasWindow)
+        DrawEmojiAtlasWindow();
+
+    // 5. Show another simple window.
+    if (ShowAnotherWindow)
+    {
+        ImGui::Begin("Another Window", &ShowAnotherWindow);
+        ImGui::Text("Hello from another window!");
+        if (ImGui::Button("Close Me"))
+            ShowAnotherWindow = false;
+        ImGui::End();
+    }
+}
+
+void ImGuiLayer::Render()
+{
+    ImGui::Render();
+}

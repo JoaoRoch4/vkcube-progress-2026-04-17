@@ -1,0 +1,112 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "cmake: configure",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B",
+                "cmake-build",
+                "-DCMAKE_C_COMPILER=/usr/bin/clang",
+                "-DCMAKE_CXX_COMPILER=/usr/bin/clang++",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "cmake: build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "cmake-build",
+                "-j8"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "cmake: configure"
+        },
+        {
+            "label": "cmake: build (release)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B",
+                "cmake-build-release",
+                "-DCMAKE_C_COMPILER=/usr/bin/clang",
+                "-DCMAKE_CXX_COMPILER=/usr/bin/clang++",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "&&",
+                "cmake",
+                "--build",
+                "cmake-build-release",
+                "-j8"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "cmake: clean",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "cmake-build",
+                "--target",
+                "clean"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "attach: patch vkcube pid",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "pid=$(pgrep -n vkcube) || { echo 'ERROR: vkcube is not running'; exit 1; }; jq --argjson pid \"$pid\" '(.configurations[] | select(.name == \"Attach vkcube (LLDB)\") | .pid) = $pid' .vscode/launch.json > /tmp/vkcube_launch_patched.json && cp /tmp/vkcube_launch_patched.json .vscode/launch.json && echo \"Patched PID: $pid\""
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "process",
+            "command": "/usr/bin/env",
+            "args": [
+                "CC=clang",
+                "CFLAGS=-g -Wall",
+                "make",
+                "${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "group": "build",
+            "label": "makelldb: selected file"
+        }
+    ]
+}

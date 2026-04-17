@@ -1,0 +1,20 @@
+{
+    "servers": {
+        "imgui-cpp-expert": {
+            "type": "stdio",
+            "command": "/home/joao/miniconda3/envs/imgui-cpp/bin/python",
+            "args": [
+                "/home/joao/vscode/imgui-1/agents/imgui-cpp-expert/mcp_server.py"
+            ],
+            "env": {}
+        },
+        "lldb-dap": {
+            "type": "stdio",
+            "command": "/home/joao/miniconda3/envs/imgui-cpp/bin/python",
+            "args": [
+                "/home/joao/vscode/vkcube/.vscode/lldb_dap_mcp.py"
+            ],
+            "env": {}
+        }
+    }
+}

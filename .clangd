@@ -1,0 +1,28 @@
+# Clangd configuration file
+# See https://clangd.llvm.org/config for more information.
+
+# Apply config conditionally (e.g. only for specific files)
+# If:
+#   PathMatch: .*\.h
+
+Diagnostics:
+  # <print> (C++23) is not fully tracked by clangd's include-cleaner; suppress
+  # the "not used directly" false positives for standard library headers.
+  UnusedIncludes: None
+
+CompileFlags:
+  # Add flags to the compile command
+  Add:
+    - -Wunused-variable
+    - -Winfinite-recursion
+    - -Warray-bounds
+    - -Wreturn-stack-address
+    - -Werror=implicit-function-declaration
+    - -Wshadow
+    - -Wshadow-field-in-constructor-modified
+    - -Wshadow-ivar
+    - -Wuninitialized
+    - -Wunused-label
+    - -Wunused-lambda-capture
+
+# Press Ctrl+Space to bring up completion suggestions

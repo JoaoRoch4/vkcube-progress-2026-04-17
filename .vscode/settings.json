@@ -1,0 +1,15 @@
+{
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/cmake-build/compile_commands.json",
+    "cmake.buildDirectory": "${workspaceFolder}/cmake-build",
+    "cmake.configureArgs": [
+        "-DCMAKE_C_COMPILER=/usr/bin/clang",
+        "-DCMAKE_CXX_COMPILER=/usr/bin/clang++"
+    ],
+    "cmake.generator": "Unix Makefiles",
+    "editor.formatOnSave": true,
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/cmake-build",
+        "--clang-tidy",
+        "--background-index"
+    ]
+}

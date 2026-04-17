@@ -1,0 +1,53 @@
+{
+    "version": "2.0.0",
+    "configurations": [
+        {
+            "type": "lldb-dap",
+            "request": "attach",
+            "name": "Attach vkcube (LLDB)",
+            "program": "${workspaceFolder}/cmake-build/vkcube",
+            "pid": 0,
+            "stopOnEntry": false,
+            "preLaunchTask": "attach: patch vkcube pid",
+            "initCommands": [
+                "settings set target.max-children-count 64"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "lldb-dap",
+            "request": "launch",
+            "name": "Debug vkcube (LLDB)",
+            "program": "${workspaceFolder}/cmake-build/vkcube",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "cmake: build",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": "Debug vkcube (GDB)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/cmake-build/vkcube",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "cmake: build",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

@@ -83,5 +83,6 @@ vkcube = executable(
   c_args : [ defs, '-Wall',
             '-Werror=implicit-function-declaration',
 	    '-Werror=missing-prototypes'],
+  link_args : ['-fuse-ld=lld'],
   dependencies : [dep_libdrm, dep_gbm, dep_libpng, dep_wayland_client, dep_xcb, dep_vulkan, dep_m],
 )
