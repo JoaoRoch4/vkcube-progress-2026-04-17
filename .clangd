@@ -14,6 +14,9 @@ CompileFlags:
   CompilationDatabase: cmake-build
   # Add flags to the compile command
   Add:
+    - -isystem
+    - /home/joao/vcpkg/installed/x64-linux/include
+    - -Wno-pragma-once-outside-header
     - -Wunused-variable
     - -Winfinite-recursion
     - -Warray-bounds
@@ -42,5 +45,4 @@ Diagnostics:
 ---
 Hover:
   ShowAKA: true
-  MacroContentsLimit: 0
 # Press Ctrl+Space to bring up completion suggestions

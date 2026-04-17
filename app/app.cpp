@@ -137,6 +137,12 @@ bool App::Init()
 		m_windows.show_copilot = persisted_state.show_copilot;
 		m_windows.show_hot_module = persisted_state.show_hot_module;
 		m_windows.show_cube = persisted_state.show_cube;
+		if (persisted_state.clear_color.has_value()) {
+			const WindowStateToml::Vec4Toml& color = persisted_state.clear_color.value();
+			m_ui_windows.ClearColor = { color.x, color.y, color.z, color.w };
+		}
+		if (persisted_state.cube_auto_spin.has_value())
+			m_cube.SetAnimate(persisted_state.cube_auto_spin.value());
 
 		m_style_editor.IsOpen = persisted_state.show_style_editor_window;
 		m_ui_windows.ShowDemoWindow = persisted_state.show_demo_window;
@@ -239,6 +245,13 @@ void App::Shutdown()
 	persisted_state.show_copilot = m_windows.show_copilot;
 	persisted_state.show_hot_module = m_windows.show_hot_module;
 	persisted_state.show_cube = m_windows.show_cube;
+	persisted_state.clear_color = WindowStateToml::Vec4Toml {
+		m_ui_windows.ClearColor.x,
+		m_ui_windows.ClearColor.y,
+		m_ui_windows.ClearColor.z,
+		m_ui_windows.ClearColor.w,
+	};
+	persisted_state.cube_auto_spin = m_cube.GetAnimate();
 	persisted_state.show_style_editor_window = m_style_editor.IsOpen;
 	persisted_state.show_demo_window = m_ui_windows.ShowDemoWindow;
 	persisted_state.show_another_window = m_ui_windows.ShowAnotherWindow;

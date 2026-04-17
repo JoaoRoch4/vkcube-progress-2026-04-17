@@ -4,6 +4,7 @@
 
 #include <array>
 #include <filesystem>
+#include <optional>
 #include <string>
 
 struct WindowStateToml {
@@ -102,26 +103,28 @@ struct WindowStateToml {
 		int hover_flags_for_tooltip_nav;
 	};
 
-	bool show_controls;
-	bool show_copilot;
-	bool show_hot_module;
-	bool show_cube;
+	bool show_controls{};
+	bool show_copilot{};
+	bool show_hot_module{};
+	bool show_cube{};
+	std::optional<Vec4Toml> clear_color;
+	std::optional<bool> cube_auto_spin;
 
-	bool show_style_editor_window;
-	bool show_demo_window;
-	bool show_another_window;
-	bool show_debug_log_mirror_window;
-	bool show_terminal_window;
-	bool show_test_engine_window;
-	bool show_emoji_atlas_window;
+	bool show_style_editor_window{};
+	bool show_demo_window{};
+	bool show_another_window{};
+	bool show_debug_log_mirror_window{};
+	bool show_terminal_window{};
+	bool show_test_engine_window{};
+	bool show_emoji_atlas_window{};
 
-	WindowRectToml controls_window;
-	WindowRectToml copilot_window;
-	WindowRectToml hello_world_window;
-	WindowRectToml style_editor_window;
-	WindowRectToml terminals_window;
-	WindowRectToml emoji_atlas_window;
-	WindowRectToml another_window;
+	WindowRectToml controls_window{};
+	WindowRectToml copilot_window{};
+	WindowRectToml hello_world_window{};
+	WindowRectToml style_editor_window{};
+	WindowRectToml terminals_window{};
+	WindowRectToml emoji_atlas_window{};
+	WindowRectToml another_window{};
 	StyleToml style;
 };
 
