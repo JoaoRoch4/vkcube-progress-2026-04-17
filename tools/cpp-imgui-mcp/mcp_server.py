@@ -1889,11 +1889,18 @@ def _cling_execute_impl(snippet: str, timeout: float = CLING_EXECUTE_TIMEOUT) ->
         }
 
     input_text = snippet.rstrip("\n") + "\n.q\n"
-    tmp = Path(tempfile.mktemp(prefix="cling_mcp_", suffix=".cpp"))
     try:
-        tmp.write_text(input_text, encoding="utf-8")
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            prefix="cling_mcp_",
+            suffix=".cpp",
+            encoding="utf-8",
+            delete=False,
+        ) as tmp_file:
+            tmp_file.write(input_text)
+            tmp_path = Path(tmp_file.name)
         cmd = [str(binary), "--nologo"]
-        with tmp.open(encoding="utf-8") as stdin_file:
+        with tmp_path.open(encoding="utf-8") as stdin_file:
             try:
                 result = subprocess.run(
                     cmd,
@@ -1910,7 +1917,7 @@ def _cling_execute_impl(snippet: str, timeout: float = CLING_EXECUTE_TIMEOUT) ->
                     "output": f"cling timed out after {timeout}s.\n\n{partial or '(no output before timeout)'}",
                 }
     finally:
-        tmp.unlink(missing_ok=True)
+        tmp_path.unlink(missing_ok=True)
 
     raw = (result.stdout + result.stderr).strip()
     # Strip cling banner/prompt lines ("[cling]$ " etc.)
