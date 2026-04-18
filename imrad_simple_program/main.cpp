@@ -6,7 +6,7 @@
 #include "app/platform/sdl_window.hpp"
 #include "app/renderer/vulkan/vulkan_context.hpp"
 #include "app/ui/imgui_layer.hpp"
-#include "app/ui/imrad/simple_window.h"
+#include "simple_window.h"
 
 namespace {
 

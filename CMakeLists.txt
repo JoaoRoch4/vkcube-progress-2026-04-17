@@ -162,8 +162,8 @@ target_compile_options(vkcube PRIVATE
 
 # ── Standalone ImRAD simple program ──────────────────────────────────────────
 add_executable(imrad_simple_program
-    ${APP_DIR}/ui/imrad/simple_program_main.cpp
-    ${APP_DIR}/ui/imrad/simple_window.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/imrad_simple_program/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/imrad_simple_program/simple_window.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui_test_engine_stubs.cpp
     ${APP_DIR}/platform/sdl_window.cpp
     ${APP_DIR}/platform/plutosvg_ft_override.cpp
@@ -174,6 +174,7 @@ add_executable(imrad_simple_program
 
 target_include_directories(imrad_simple_program PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/imrad_simple_program
     ${APP_DIR}
     ${IMGUI_DIR}
     ${IMGUI_DIR}/backends
