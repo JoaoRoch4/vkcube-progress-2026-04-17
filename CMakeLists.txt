@@ -94,6 +94,7 @@ set(APP_SOURCES
     ${APP_DIR}/renderer/vulkan/vulkan_emoji_atlas.cpp
     ${APP_DIR}/ui/emoji_atlas.cpp
     ${APP_DIR}/ui/imgui_layer.cpp
+    ${APP_DIR}/ui/imgui_window.cpp
     ${APP_DIR}/ui/style_editor.cpp
     ${APP_DIR}/ui/ui_windows.cpp
     ${APP_DIR}/ui/imgui_console.cpp
