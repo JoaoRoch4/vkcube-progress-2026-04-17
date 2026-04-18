@@ -169,10 +169,7 @@ public:
     void RegisterCallable(const char* name, const char* description,
                           std::function<void(std::string_view)> fn);
 
-private:
-    std::unordered_map<std::string, std::string> Variables;
-
-    // One private method per command — registered in the ctor via lambdas.
+    // One public method per command — can be called directly or via the registry.
     void CmdHelp    (const ConsoleCommandArgs& a);
     void CmdHistory (const ConsoleCommandArgs& a);
     void CmdClear   (const ConsoleCommandArgs& a);
@@ -194,5 +191,8 @@ private:
         std::string                      description;
         std::function<void(std::string_view)> fn;
     };
+
+private:
+    std::unordered_map<std::string, std::string> Variables;
     std::unordered_map<std::string, CallableDef> Callables_;
 };
