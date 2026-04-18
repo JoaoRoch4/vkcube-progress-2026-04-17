@@ -149,6 +149,7 @@ protected:
 //   COPILOT <question…>      Ask GitHub Copilot CLI: `gh copilot suggest "<question>"`
 //   TERMINAL                 Open an interactive shell ($SHELL) in the console
 //   KONSOLE                  Alias for TERMINAL
+//   CALL <name> [args…]      Invoke a registered app callable by name
 //   QUIT                     Signal the application to exit
 //
 // Wire the three callbacks below (from ImGuiLayer) to make DEMO / STYLE / QUIT
@@ -162,6 +163,11 @@ public:
     std::function<void(int)>  OnStyleChange; // fired by STYLE (0=dark,1=light,2=classic)
 
     ConsoleCommands();
+
+    // Register an app-level callable that CALL can invoke.
+    // 'name' is stored and matched case-insensitively.
+    void RegisterCallable(const char* name, const char* description,
+                          std::function<void(std::string_view)> fn);
 
 private:
     std::unordered_map<std::string, std::string> Variables;
@@ -181,4 +187,12 @@ private:
     void CmdBash     (const ConsoleCommandArgs& a);
     void CmdCopilot  (const ConsoleCommandArgs& a);
     void CmdTerminal (const ConsoleCommandArgs& a);
+    void CmdCall     (const ConsoleCommandArgs& a);
+
+    struct CallableDef {
+        std::string                      name;        // upper-cased
+        std::string                      description;
+        std::function<void(std::string_view)> fn;
+    };
+    std::unordered_map<std::string, CallableDef> Callables_;
 };
