@@ -1,6 +1,7 @@
 #pragma once
 
 #include "imgui.h"
+#include "imgui_window.hpp"
 #include "window_state_toml.hpp"
 #include <string>
 
@@ -10,7 +11,7 @@ class StyleEditor {
     public:
 	StyleEditor();
 	bool IsOpen;
-	ImGuiWindowFlags WindowFlags;
+	ImGuiWindow Window;
 
 	// Call immediately after ImGuiLayer::Init to capture the default style.
 	void InitDefaults();

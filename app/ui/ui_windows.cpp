@@ -3,6 +3,7 @@
 #include "app/ui/style_editor.hpp"
 #include "emoji_atlas.hpp"
 #include "imgui.h"
+#include "imgui_window.hpp"
 
 #include <array>
 #include <format>
@@ -24,10 +25,10 @@ UiWindows::UiWindows()
     , ShowEmojiAtlasWindow { true }
     , RequestQuit { false }
     , ClearColor { 0.45f, 0.55f, 0.60f, 1.00f }
-    , HelloWorldWindowFlags { ImGuiWindowFlags_None }
-    , AnotherWindowFlags { ImGuiWindowFlags_None }
-    , TerminalWindowFlags { ImGuiWindowFlags_None }
-    , EmojiAtlasWindowFlags { ImGuiWindowFlags_None }
+    , HelloWorldWindow {}
+    , AnotherWindow {}
+    , TerminalWindow {}
+    , EmojiAtlasWindow {}
     , m_emoji_atlas_view { nullptr }
     , m_hello_world_window { false, 0.0f, 0.0f, 0.0f, 0.0f }
     , m_terminals_window { false, 0.0f, 0.0f, 0.0f, 0.0f }
@@ -89,18 +90,18 @@ void UiWindows::SetHelloWorldControls(bool* show_controls, std::function<void()>
 void UiWindows::DrawTerminals()
 {
 	if (m_apply_terminals_layout_once && m_terminals_window.valid) {
-		ImGui::SetNextWindowPos(ImVec2(m_terminals_window.x, m_terminals_window.y), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(m_terminals_window.w, m_terminals_window.h), ImGuiCond_Always);
+		TerminalWindow.SetNextPos(ImVec2(m_terminals_window.x, m_terminals_window.y), ImGuiCond_Always);
+		TerminalWindow.SetNextSize(ImVec2(m_terminals_window.w, m_terminals_window.h), ImGuiCond_Always);
 	} else {
-		ImGui::SetNextWindowSize(ImVec2(800, 500), ImGuiCond_FirstUseEver);
+		TerminalWindow.SetNextSize(ImVec2(800, 500), ImGuiCond_FirstUseEver);
 	}
-	if (!ImGui::Begin("Terminals", &ShowTerminalWindow, TerminalWindowFlags)) {
-		ImGui::End();
+	if (!TerminalWindow.Begin("Terminals", &ShowTerminalWindow, TerminalWindow.Flags)) {
+		TerminalWindow.End();
 		return;
 	}
 	{
-		ImVec2 pos = ImGui::GetWindowPos();
-		ImVec2 size = ImGui::GetWindowSize();
+		ImVec2 pos = TerminalWindow.GetWindowPos();
+		ImVec2 size = TerminalWindow.GetWindowSize();
 		m_terminals_window = { true, pos.x, pos.y, size.x, size.y };
 		m_apply_terminals_layout_once = false;
 	}
@@ -125,7 +126,7 @@ void UiWindows::DrawTerminals()
 			AddTerminal();
 		ImGui::EndTabBar();
 	}
-	ImGui::End();
+	TerminalWindow.End();
 }
 
 void UiWindows::DrawEmojiAtlasWindow()
@@ -134,18 +135,18 @@ void UiWindows::DrawEmojiAtlasWindow()
 		return;
 
 	if (m_apply_emoji_atlas_layout_once && m_emoji_atlas_window.valid) {
-		ImGui::SetNextWindowPos(ImVec2(m_emoji_atlas_window.x, m_emoji_atlas_window.y), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(m_emoji_atlas_window.w, m_emoji_atlas_window.h), ImGuiCond_Always);
+		EmojiAtlasWindow.SetNextPos(ImVec2(m_emoji_atlas_window.x, m_emoji_atlas_window.y), ImGuiCond_Always);
+		EmojiAtlasWindow.SetNextSize(ImVec2(m_emoji_atlas_window.w, m_emoji_atlas_window.h), ImGuiCond_Always);
 	} else {
-		ImGui::SetNextWindowSize(ImVec2(420.0f, 260.0f), ImGuiCond_FirstUseEver);
+		EmojiAtlasWindow.SetNextSize(ImVec2(420.0f, 260.0f), ImGuiCond_FirstUseEver);
 	}
-	if (!ImGui::Begin("Emoji Atlas", &ShowEmojiAtlasWindow, EmojiAtlasWindowFlags)) {
-		ImGui::End();
+	if (!EmojiAtlasWindow.Begin("Emoji Atlas", &ShowEmojiAtlasWindow, EmojiAtlasWindow.Flags)) {
+		EmojiAtlasWindow.End();
 		return;
 	}
 	{
-		ImVec2 pos = ImGui::GetWindowPos();
-		ImVec2 size = ImGui::GetWindowSize();
+		ImVec2 pos = EmojiAtlasWindow.GetWindowPos();
+		ImVec2 size = EmojiAtlasWindow.GetWindowSize();
 		m_emoji_atlas_window = { true, pos.x, pos.y, size.x, size.y };
 		m_apply_emoji_atlas_layout_once = false;
 	}
@@ -183,7 +184,7 @@ void UiWindows::DrawEmojiAtlasWindow()
 
 	ImGui::Separator();
 	ImGui::Text("Atlas size: %d x %d", m_emoji_atlas_view->AtlasWidth(), m_emoji_atlas_view->AtlasHeight());
-	ImGui::End();
+	EmojiAtlasWindow.End();
 }
 
 void UiWindows::Draw(StyleEditor* style_editor)
@@ -200,12 +201,12 @@ void UiWindows::Draw(StyleEditor* style_editor)
 		static int counter = 0;
 
 		if (m_apply_hello_world_layout_once && m_hello_world_window.valid) {
-			ImGui::SetNextWindowPos(ImVec2(m_hello_world_window.x, m_hello_world_window.y), ImGuiCond_Always);
-			ImGui::SetNextWindowSize(ImVec2(m_hello_world_window.w, m_hello_world_window.h), ImGuiCond_Always);
+			HelloWorldWindow.SetNextPos(ImVec2(m_hello_world_window.x, m_hello_world_window.y), ImGuiCond_Always);
+			HelloWorldWindow.SetNextSize(ImVec2(m_hello_world_window.w, m_hello_world_window.h), ImGuiCond_Always);
 		}
-		if (ImGui::Begin("Hello, world!", &ShowHelloWorldWindow, HelloWorldWindowFlags)) {
-			ImVec2 pos = ImGui::GetWindowPos();
-			ImVec2 size = ImGui::GetWindowSize();
+		if (HelloWorldWindow.Begin("Hello, world!", &ShowHelloWorldWindow, HelloWorldWindow.Flags)) {
+			ImVec2 pos = HelloWorldWindow.GetWindowPos();
+			ImVec2 size = HelloWorldWindow.GetWindowSize();
 			m_hello_world_window = { true, pos.x, pos.y, size.x, size.y };
 			m_apply_hello_world_layout_once = false;
 
@@ -232,7 +233,7 @@ void UiWindows::Draw(StyleEditor* style_editor)
 				m_draw_controls_section();
 			}
 		}
-		ImGui::End();
+		HelloWorldWindow.End();
 	}
 
 	// 3. Debug log mirror window.
@@ -253,20 +254,20 @@ void UiWindows::Draw(StyleEditor* style_editor)
 	// 6. Show another simple window.
 	if (ShowAnotherWindow) {
 		if (m_apply_another_layout_once && m_another_window.valid) {
-			ImGui::SetNextWindowPos(ImVec2(m_another_window.x, m_another_window.y), ImGuiCond_Always);
-			ImGui::SetNextWindowSize(ImVec2(m_another_window.w, m_another_window.h), ImGuiCond_Always);
+			AnotherWindow.SetNextPos(ImVec2(m_another_window.x, m_another_window.y), ImGuiCond_Always);
+			AnotherWindow.SetNextSize(ImVec2(m_another_window.w, m_another_window.h), ImGuiCond_Always);
 		}
-		ImGui::Begin("Another Window", &ShowAnotherWindow, AnotherWindowFlags);
+		AnotherWindow.Begin("Another Window", &ShowAnotherWindow, AnotherWindow.Flags);
 		{
-			ImVec2 pos = ImGui::GetWindowPos();
-			ImVec2 size = ImGui::GetWindowSize();
+			ImVec2 pos = AnotherWindow.GetWindowPos();
+			ImVec2 size = AnotherWindow.GetWindowSize();
 			m_another_window = { true, pos.x, pos.y, size.x, size.y };
 			m_apply_another_layout_once = false;
 		}
 		ImGui::Text("Hello from another window!");
 		if (ImGui::Button("Close Me"))
 			ShowAnotherWindow = false;
-		ImGui::End();
+		AnotherWindow.End();
 	}
 }
 
