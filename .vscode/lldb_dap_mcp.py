@@ -853,6 +853,125 @@ def inspect_state(thread_id: int = 0, frames: int = 5, vars_depth: int = 2) -> s
     return "\n".join(out)
 
 
+# ── Call mapping / function calling ──────────────────────────────────────────
+
+
+@mcp.tool(
+    description=(
+        "Return the current call stack as a Markdown table with columns "
+        "Level, Frame ID, Function, Source, and Line. "
+        "Optionally include local variables for each frame. "
+        "Useful for a quick orientation after a breakpoint or crash."
+    )
+)
+def map_function_calls(
+    thread_id: int = 0,
+    frames: int = 10,
+    include_variables: bool = True,
+    max_variables_per_frame: int = 8,
+) -> str:
+    """Render the call stack (and optionally local variables) as Markdown tables."""
+    err = _require_active()
+    if err:
+        return err
+
+    tid = thread_id or _client._current_thread_id or 1
+    resp = _client.request(
+        "stackTrace",
+        {"threadId": tid, "startFrame": 0, "levels": max(1, min(frames, 50))},
+    )
+    stack_frames = (resp.get("body") or {}).get("stackFrames", [])
+    if not stack_frames:
+        return "Empty call stack — program may not be stopped."
+
+    header = "| Level | Frame ID | Function | Source | Line |"
+    sep    = "|-------|----------|----------|--------|------|"
+    rows: list[str] = [header, sep]
+    for level, f in enumerate(stack_frames):
+        src = f.get("source") or {}
+        path = src.get("path", src.get("name", "?"))
+        name = f.get("name", "?").replace("|", "\\|")
+        fid  = f.get("id", "?")
+        line = f.get("line", 0)
+        rows.append(f"| {level} | {fid} | {name} | {path} | {line} |")
+
+    output = "\n".join(rows)
+
+    if include_variables and max_variables_per_frame > 0:
+        var_sections: list[str] = []
+        for f in stack_frames:
+            fid = f.get("id")
+            if fid is None:
+                continue
+            sc_resp = _client.request("scopes", {"frameId": fid})
+            scopes = (sc_resp.get("body") or {}).get("scopes", [])
+            for sc in scopes:
+                if "local" not in sc.get("name", "").lower():
+                    continue
+                vref = sc.get("variablesReference")
+                if not vref:
+                    break
+                vr = _client.request("variables", {"variablesReference": vref})
+                vs = (vr.get("body") or {}).get("variables", [])[:max_variables_per_frame]
+                if vs:
+                    fn = f.get("name", "?")
+                    var_lines = [f"\n**{fn}** (frame {fid}) locals:"]
+                    for v in vs:
+                        var_lines.append(
+                            f"  - `{v.get('name','?')}` : "
+                            f"{v.get('type','')} = {v.get('value','')}"
+                        )
+                    var_sections.append("\n".join(var_lines))
+                break
+        if var_sections:
+            output += "\n" + "\n".join(var_sections)
+
+    return output
+
+
+@mcp.tool(
+    description=(
+        "Evaluate a full C++ function-call expression in the debugger and return its result. "
+        "The expression must look like a call, e.g. 'strlen(ptr)' or 'obj.method(42)'. "
+        "Use evaluate() for arbitrary expressions."
+    )
+)
+def call_function(function_call: str, frame_id: int = 0) -> str:
+    """Validate that function_call is a call expression, then evaluate it."""
+    expr = function_call.strip()
+    # Require the expression to contain balanced parentheses (a call shape)
+    if "(" not in expr or ")" not in expr:
+        return (
+            "Expected a full function call expression such as 'func(args)'. "
+            f"Got: {expr!r}"
+        )
+    if expr.count("(") != expr.count(")"):
+        return (
+            "Expected a full function call expression with balanced parentheses. "
+            f"Got: {expr!r}"
+        )
+
+    err = _require_active()
+    if err:
+        return err
+
+    args: dict[str, Any] = {"expression": expr, "context": "repl"}
+    if frame_id:
+        args["frameId"] = frame_id
+
+    resp = _client.request("evaluate", args)
+    if not resp.get("success"):
+        return f"Call failed: {resp.get('message', '?')}"
+
+    body = resp.get("body") or {}
+    result = body.get("result", "")
+    rtype  = body.get("type", "")
+    out = f"= {result}"
+    if rtype:
+        out += f"  ({rtype})"
+    return out
+
+
 # ── Entry point ────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

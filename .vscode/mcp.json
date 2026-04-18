@@ -10,14 +10,9 @@
         },
         "cpp-imgui-mcp": {
             "type": "stdio",
-            "command": "/home/joao/miniconda3/bin/conda",
+            "command": "python3",
             "args": [
-                "run",
-                "--no-capture-output",
-                "-n",
-                "imgui-cpp",
-                "python",
-                "/home/joao/vscode/vkcube-progress-2026-04-17/tools/cpp-imgui-mcp/mcp_server.py"
+                "${workspaceFolder}/tools/cpp-imgui-mcp/mcp_server.py"
             ],
             "env": {
                 "PYTHONUNBUFFERED": "1"

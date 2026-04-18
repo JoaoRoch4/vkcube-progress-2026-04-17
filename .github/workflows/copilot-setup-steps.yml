@@ -1,0 +1,51 @@
+name: "Copilot Setup Steps"
+
+# Run whenever the file changes (validates the setup) and allow manual runs.
+on:
+    workflow_dispatch:
+    push:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
+    pull_request:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+    # MUST be named exactly `copilot-setup-steps` to be picked up by the agent.
+    copilot-setup-steps:
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Python 3.11
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.11"
+                  cache: "pip"
+
+            - name: Install cpp-imgui-mcp Python dependencies
+              run: |
+                  pip install --upgrade pip
+                  pip install "mcp[cli]>=1.0"
+
+            - name: Smoke-test MCP server import
+              run: |
+                  python - <<'EOF'
+                  import importlib.util, sys, pathlib
+                  # Verify the combined server can be imported without the external
+                  # imgui-1 / vkcube repos (those workspaces will simply be absent).
+                  p = pathlib.Path("tools/cpp-imgui-mcp/mcp_server.py")
+                  spec = importlib.util.spec_from_file_location("cpp_imgui_mcp", p)
+                  mod = importlib.util.module_from_spec(spec)
+                  try:
+                      spec.loader.exec_module(mod)
+                      print("cpp-imgui-mcp import OK")
+                  except Exception as e:
+                      print(f"cpp-imgui-mcp import FAILED: {e}", file=sys.stderr)
+                      sys.exit(1)
+                  EOF

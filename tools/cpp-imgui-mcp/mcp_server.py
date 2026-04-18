@@ -37,11 +37,22 @@ from mcp.server.fastmcp import FastMCP
 
 
 THIS_DIR = Path(__file__).resolve().parent
-IMGUI_ROOT = Path("/home/joao/vscode/imgui-1").resolve()
-VKCUBE_ROOT = Path("/home/joao/vscode/vkcube").resolve()
-VKCUBE_PROGRESS_ROOT = Path("/home/joao/vscode/vkcube-progress-2026-04-17").resolve()
-EXPERT_SERVER_PATH = IMGUI_ROOT / "agents" / "imgui-cpp-expert" / "mcp_server.py"
-LLDB_SERVER_PATH = VKCUBE_ROOT / ".vscode" / "lldb_dap_mcp.py"
+# Repo root is two levels up from tools/cpp-imgui-mcp/
+VKCUBE_PROGRESS_ROOT = THIS_DIR.parent.parent.resolve()
+# External workspace roots — used when those repos are checked out locally.
+# They may not exist in CI / cloud-agent environments; their workspace entries
+# will simply produce empty results in that case.
+IMGUI_ROOT = Path(os.environ.get("IMGUI_ROOT", "/home/joao/vscode/imgui-1")).resolve()
+VKCUBE_ROOT = Path(os.environ.get("VKCUBE_ROOT", "/home/joao/vscode/vkcube")).resolve()
+# imgui-cpp-expert server lives in agents/ inside this repo; fall back to the
+# external imgui-1 repo path for local development setups that keep it there.
+_EXPERT_IN_REPO = VKCUBE_PROGRESS_ROOT / "agents" / "imgui-cpp-expert" / "mcp_server.py"
+_EXPERT_EXTERNAL = IMGUI_ROOT / "agents" / "imgui-cpp-expert" / "mcp_server.py"
+EXPERT_SERVER_PATH = _EXPERT_IN_REPO if _EXPERT_IN_REPO.exists() else _EXPERT_EXTERNAL
+# lldb DAP server lives in .vscode/ of this repo; fall back to the vkcube repo.
+_LLDB_IN_REPO = VKCUBE_PROGRESS_ROOT / ".vscode" / "lldb_dap_mcp.py"
+_LLDB_EXTERNAL = VKCUBE_ROOT / ".vscode" / "lldb_dap_mcp.py"
+LLDB_SERVER_PATH = _LLDB_IN_REPO if _LLDB_IN_REPO.exists() else _LLDB_EXTERNAL
 RG_BIN = subprocess.run(["bash", "-lc", "command -v rg || true"], capture_output=True, text=True).stdout.strip()
 BUILD_TIMEOUT = 600
 RUN_TIMEOUT = 15.0
