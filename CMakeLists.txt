@@ -87,6 +87,7 @@ set(IMGUI_TE_SOURCES
 
 # ── App class sources ─────────────────────────────────────────────────────────
 set(APP_SOURCES
+    ${APP_DIR}/scripting/hybrid_runtime.cpp
     ${APP_DIR}/platform/sdl_window.cpp
     ${APP_DIR}/platform/plutosvg_ft_override.cpp
     ${APP_DIR}/renderer/vulkan/vulkan_context.cpp

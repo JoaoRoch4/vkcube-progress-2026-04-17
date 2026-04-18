@@ -1,4 +1,4 @@
-#include "app/app.hpp"
+#include "app.hpp"
 
 #include <cstdlib>
 #include <filesystem>
@@ -55,6 +55,18 @@ extern "C" void copilot_reload_hot()
 {
 	if (g_hot_module)
 		g_hot_module->load();
+}
+
+extern "C" void copilot_run_js(const char* msg)
+{
+	if (msg && g_windows)
+		g_windows->RunJavaScript(msg);
+}
+
+extern "C" void copilot_run_python(const char* msg)
+{
+	if (msg && g_windows)
+		g_windows->RunPython(msg);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

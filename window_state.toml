@@ -72,9 +72,9 @@ valid = true
 # Window width in pixels.
 w = 480.0
 # Window left position in pixels.
-x = 20.0
+x = 158.0
 # Window top position in pixels.
-y = 200.0
+y = 371.0
 
 [emoji_atlas_window]
 # Window height in pixels.

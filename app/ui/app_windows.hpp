@@ -3,7 +3,9 @@
 #include <array>
 #include <deque>
 #include <string>
+#include <string_view>
 
+#include "scripting/hybrid_runtime.hpp"
 #include "app/ui/main_menu_bar.hpp"
 #include "app/ui/window_state_toml.hpp"
 
@@ -31,6 +33,8 @@ class AppWindows {
 
 	void Setup(CubeRenderer* cube, HotModule* hot, UiWindows* ui_windows,
 		StyleEditor* style_editor, TestEngineLayer* test_engine);
+	void RunJavaScript(std::string_view prompt);
+	void RunPython(std::string_view prompt);
 	void ApplyLayout(const WindowStateToml& state);
 	void ExportLayout(WindowStateToml* state) const;
 	void BuildAll();
@@ -47,6 +51,7 @@ class AppWindows {
 	TestEngineLayer* m_test_engine;
 	std::array<char, 512> m_input_buf;
 	MainMenuBar m_main_menu;
+	HybridScriptRuntime m_hybrid_runtime;
 	WindowStateToml::WindowRectToml m_copilot_window;
 	bool m_apply_copilot_layout_once;
 };

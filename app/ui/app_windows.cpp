@@ -1,4 +1,4 @@
-#include "app/ui/app_windows.hpp"
+#include "app_windows.hpp"
 
 #include "app/hot_loader.hpp"
 #include "app/renderer/vulkan/cube_renderer.hpp"
@@ -6,6 +6,8 @@
 #include "app/ui/test_engine_layer.hpp"
 #include "app/ui/ui_windows.hpp"
 #include "imgui.h"
+#include <filesystem>
+#include <format>
 
 AppWindows::AppWindows()
     : show_controls { true }
@@ -36,6 +38,25 @@ void AppWindows::Setup(CubeRenderer* cube, HotModule* hot, UiWindows* ui_windows
 	m_test_engine = test_engine;
 	m_main_menu.Setup(&show_controls, &show_copilot, &show_hot_module, m_ui_windows, m_style_editor);
 	m_ui_windows->SetHelloWorldControls(&show_controls, [this]() { DrawControlsSection(); });
+	m_hybrid_runtime.Init(std::filesystem::current_path());
+}
+
+void AppWindows::RunJavaScript(std::string_view prompt)
+{
+	const HybridRunResult result = m_hybrid_runtime.RunJavaScript(prompt);
+	copilot_messages.emplace_back(std::format("[{}:{}] {}",
+		result.runtime,
+		result.exit_code,
+		result.output));
+}
+
+void AppWindows::RunPython(std::string_view prompt)
+{
+	const HybridRunResult result = m_hybrid_runtime.RunPython(prompt);
+	copilot_messages.emplace_back(std::format("[{}:{}] {}",
+		result.runtime,
+		result.exit_code,
+		result.output));
 }
 
 void AppWindows::ApplyLayout(const WindowStateToml& state)
@@ -95,6 +116,11 @@ void AppWindows::BuildCopilot()
 			ImGui::TextWrapped("%s", msg.c_str());
 		if (!copilot_messages.empty() && ImGui::Button("Clear"))
 			copilot_messages.clear();
+		if (ImGui::Button("Run JS ping"))
+			RunJavaScript("ping");
+		ImGui::SameLine();
+		if (ImGui::Button("Run Python ping"))
+			RunPython("ping");
 		ImGui::Separator();
 		ImGui::SetNextItemWidth(-80.0f);
 		bool submitted = ImGui::InputText("##copilot_in",
@@ -105,6 +131,13 @@ void AppWindows::BuildCopilot()
 			user_messages.emplace_back(m_input_buf.data());
 			m_input_buf.fill('\0');
 			ImGui::SetKeyboardFocusHere(-1);
+		}
+		if (m_input_buf.at(0) != '\0') {
+			if (ImGui::Button("Send To JS"))
+				RunJavaScript(m_input_buf.data());
+			ImGui::SameLine();
+			if (ImGui::Button("Send To Python"))
+				RunPython(m_input_buf.data());
 		}
 	}
 	ImGui::End();

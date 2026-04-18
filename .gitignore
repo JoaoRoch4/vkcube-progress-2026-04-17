@@ -3,3 +3,9 @@
 build*
 cmake-build/*
 
+.conda/*
+.conda/hybrid/*
+scripts/hybrid/node_modules/*
+
+.conda/hybrid/bin/pydoc
+imgui.ini
