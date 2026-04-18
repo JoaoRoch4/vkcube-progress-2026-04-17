@@ -8,6 +8,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 class EmojiAtlas;
@@ -48,6 +49,11 @@ class UiWindows {
 	// Append a new terminal tab.  If name is null, auto-generates "Terminal N".
 	void AddTerminal(const char* name = nullptr);
 
+	// Register an app callable on all current and future terminals.
+	// CALL <name> [args…] in the terminal will invoke fn(args).
+	void RegisterCallable(const char* name, const char* description,
+	                      std::function<void(std::string_view)> fn);
+
 	// Set the emoji atlas for terminals and the emoji atlas window.
 	void SetEmojiAtlas(const EmojiAtlas* atlas);
 
@@ -72,6 +78,12 @@ class UiWindows {
 	void DrawTerminals();
 	void DrawEmojiAtlasWindow();
 
+	struct StoredCallable {
+		std::string                           name;
+		std::string                           description;
+		std::function<void(std::string_view)> fn;
+	};
+
 	const EmojiAtlas* m_emoji_atlas_view;
 	WindowStateToml::WindowRectToml m_hello_world_window;
 	WindowStateToml::WindowRectToml m_terminals_window;
@@ -83,4 +95,5 @@ class UiWindows {
 	bool m_apply_another_layout_once;
 	bool* m_show_controls;
 	std::function<void()> m_draw_controls_section;
+	std::vector<StoredCallable> m_callables;
 };

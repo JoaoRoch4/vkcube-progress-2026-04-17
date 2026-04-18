@@ -8,6 +8,7 @@
 #include <array>
 #include <format>
 #include <string>
+#include <string_view>
 #include <utility>
 
 UiWindows::TerminalTab::TerminalTab()
@@ -71,6 +72,8 @@ void UiWindows::AddTerminal(const char* name)
 	t.console = std::make_unique<ConsoleCommands>();
 	t.console->SetEmojiAtlas(m_emoji_atlas_view);
 	WireTerminalCallbacks(*t.console);
+	for (const StoredCallable& c : m_callables)
+		t.console->RegisterCallable(c.name.c_str(), c.description.c_str(), c.fn);
 	Terminals.push_back(std::move(t));
 }
 
@@ -79,6 +82,16 @@ void UiWindows::SetEmojiAtlas(const EmojiAtlas* atlas)
 	m_emoji_atlas_view = atlas;
 	for (TerminalTab& terminal : Terminals)
 		terminal.console->SetEmojiAtlas(atlas);
+}
+
+void UiWindows::RegisterCallable(const char* name, const char* description,
+	std::function<void(std::string_view)> fn)
+{
+	// Register on all existing terminals.
+	for (TerminalTab& t : Terminals)
+		t.console->RegisterCallable(name, description, fn);
+	// Store for terminals created later.
+	m_callables.push_back({ name, description, std::move(fn) });
 }
 
 void UiWindows::SetHelloWorldControls(bool* show_controls, std::function<void()> draw_controls_section)

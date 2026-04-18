@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <print>
 #include <string>
+#include <string_view>
 
 #include <SDL3/SDL.h>
 
@@ -141,6 +142,23 @@ bool App::Init()
 	// 7. Wire up UI windows and expose to LLDB hooks
 	m_windows.Setup(&m_cube, &m_hot, &m_ui_windows, &m_style_editor, &m_test_engine);
 	g_windows = &m_windows;
+
+	// Register app callable methods so the terminal CALL command can invoke them.
+	m_ui_windows.RegisterCallable("copilot_say",
+		"Send a message to the Copilot window: CALL copilot_say <msg>",
+		[](std::string_view arg) { copilot_say(std::string(arg).c_str()); });
+	m_ui_windows.RegisterCallable("copilot_run_test",
+		"Queue a named test: CALL copilot_run_test <category/name>",
+		[](std::string_view arg) { copilot_run_test(std::string(arg).c_str()); });
+	m_ui_windows.RegisterCallable("copilot_reload_hot",
+		"Reload the hot-module shared library: CALL copilot_reload_hot",
+		[](std::string_view) { copilot_reload_hot(); });
+	m_ui_windows.RegisterCallable("copilot_run_js",
+		"Run a JavaScript snippet: CALL copilot_run_js <script>",
+		[](std::string_view arg) { copilot_run_js(std::string(arg).c_str()); });
+	m_ui_windows.RegisterCallable("copilot_run_python",
+		"Run a Python snippet: CALL copilot_run_python <script>",
+		[](std::string_view arg) { copilot_run_python(std::string(arg).c_str()); });
 
 	// 8. Restore persisted window visibility state (TOML)
 	WindowStateToml persisted_state {};

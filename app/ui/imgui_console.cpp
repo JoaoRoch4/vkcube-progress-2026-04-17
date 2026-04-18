@@ -652,6 +652,8 @@ ConsoleCommands::ConsoleCommands()
 		bind(&ConsoleCommands::CmdTerminal));
 	RegisterCommand("KONSOLE", "Alias for TERMINAL",
 		bind(&ConsoleCommands::CmdTerminal));
+	RegisterCommand("CALL", "Invoke app callable: CALL <name> [args\u2026]",
+		bind(&ConsoleCommands::CmdCall));
 	RegisterCommand("QUIT", "Exit the application",
 		bind(&ConsoleCommands::CmdQuit));
 }
@@ -1178,8 +1180,56 @@ void ConsoleCommands::CmdCopilot(const ConsoleCommandArgs& a)
 	worker.detach();
 }
 
-// ── TERMINAL / KONSOLE
-// ──────────────────────────────────────────────────────── Strip ANSI/VT100
+// ── CALL ─────────────────────────────────────────────────────────────────────
+
+void ConsoleCommands::RegisterCallable(const char* name, const char* description,
+	std::function<void(std::string_view)> fn)
+{
+	std::string key(name);
+	for (char& c : key)
+		c = static_cast<char>(toupper(static_cast<unsigned char>(c)));
+	Callables_.insert_or_assign(key,
+		CallableDef { key, std::string(description), std::move(fn) });
+}
+
+void ConsoleCommands::CmdCall(const ConsoleCommandArgs& a)
+{
+	if (a.args.empty()) {
+		AddLog("[error] Usage: CALL <name> [args\u2026]\n");
+		if (Callables_.empty()) {
+			AddLog("(no callables registered)\n");
+		} else {
+			AddLog("Available callables:\n");
+			for (const auto& [k, def] : Callables_)
+				AddLog(std::format("\x01{}\t{}\n", def.name, def.description));
+		}
+		return;
+	}
+
+	std::string key = a.args.at(0);
+	for (char& c : key)
+		c = static_cast<char>(toupper(static_cast<unsigned char>(c)));
+
+	auto it = Callables_.find(key);
+	if (it == Callables_.end()) {
+		AddLog(std::format("[error] Unknown callable '{}'\n", a.args.at(0)));
+		return;
+	}
+
+	// Build the argument string: everything after the callable name token.
+	std::string_view raw = a.raw_args;
+	size_t space = raw.find(' ');
+	std::string_view call_args = (space != std::string_view::npos)
+		? raw.substr(space + 1)
+		: std::string_view {};
+	while (!call_args.empty() && call_args.front() == ' ')
+		call_args.remove_prefix(1);
+
+	AddLog(std::format("call {}(\"{}\")\n", it->second.name, call_args));
+	it->second.fn(call_args);
+}
+
+// ── TERMINAL / KONSOLE// ──────────────────────────────────────────────────────── Strip ANSI/VT100
 // escape sequences so shell prompts appear as plain text.
 
 static std::string StripAnsi(const std::string& in)
