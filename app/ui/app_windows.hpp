@@ -1,10 +1,12 @@
 #pragma once
 
 #include <array>
+#include <cstddef>
 #include <deque>
 #include <string>
 #include <string_view>
 
+#include "app/ui/imanim.hpp"
 #include "app/ui/imgui_window.hpp"
 #include "scripting/hybrid_runtime.hpp"
 #include "app/ui/main_menu_bar.hpp"
@@ -55,4 +57,6 @@ class AppWindows {
 	HybridScriptRuntime m_hybrid_runtime;
 	WindowStateToml::WindowRectToml m_copilot_window;
 	bool m_apply_copilot_layout_once;
+	bool m_copilot_waiting;
+	std::size_t m_copilot_prev_msg_count;
 };
