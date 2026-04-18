@@ -28,6 +28,7 @@ AppWindows::AppWindows()
     , m_apply_copilot_layout_once { false }
     , m_copilot_waiting { false }
     , m_copilot_prev_msg_count { 0 }
+    , m_runtime_mode { 0 }
 {
 }
 
@@ -58,6 +59,14 @@ void AppWindows::RunPython(std::string_view prompt)
 	const HybridRunResult result = m_hybrid_runtime.RunPython(prompt);
 	copilot_messages.emplace_back(std::format("[{}:{}] {}",
 		result.runtime,
+		result.exit_code,
+		result.output));
+}
+
+void AppWindows::RunCpp(std::string_view snippet)
+{
+	const ClingRunResult result = m_cling_runtime.Execute(snippet);
+	copilot_messages.emplace_back(std::format("[cling:{}] {}",
 		result.exit_code,
 		result.output));
 }
@@ -261,8 +270,27 @@ void AppWindows::BuildCopilot()
 		    ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar)) {
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2.0f);
 
-		// "copilot" label
+		// Runtime selector: JS | Py | C++
 		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 6.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.68f, 0.68f, 0.78f, 1.00f));
+		constexpr const char* kRuntimeLabels[] = { "JS", "Py", "C++" };
+		for (int i = 0; i < 3; ++i) {
+			if (i > 0)
+				ImGui::SameLine(0.0f, 2.0f);
+			const bool active = (m_runtime_mode == i);
+			if (active)
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20f, 0.22f, 0.46f, 1.00f));
+			if (ImGui::SmallButton(kRuntimeLabels[i]))
+				m_runtime_mode = i;
+			if (active)
+				ImGui::PopStyleColor();
+		}
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar();
+		ImGui::SameLine(0.0f, 6.0f);
+
+		// "copilot" label
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.28f, 0.80f, 0.56f, 1.00f));
 		ImGui::TextUnformatted("copilot");
 		ImGui::PopStyleColor();
@@ -290,7 +318,11 @@ void AppWindows::BuildCopilot()
 			user_messages.emplace_back(prompt);
 			m_copilot_prev_msg_count = copilot_messages.size();
 			m_copilot_waiting        = true;
-			RunJavaScript(prompt);
+			switch (m_runtime_mode) {
+			case 1:  RunPython(prompt);     break;
+			case 2:  RunCpp(prompt);        break;
+			default: RunJavaScript(prompt); break;
+			}
 			m_input_buf.fill('\0');
 		}
 	}
