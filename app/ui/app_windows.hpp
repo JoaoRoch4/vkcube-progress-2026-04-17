@@ -5,6 +5,7 @@
 #include <string>
 #include <string_view>
 
+#include "app/ui/imgui_window.hpp"
 #include "scripting/hybrid_runtime.hpp"
 #include "app/ui/main_menu_bar.hpp"
 #include "app/ui/window_state_toml.hpp"
@@ -26,7 +27,7 @@ class AppWindows {
 	bool show_copilot;
 	bool show_hot_module;
 	bool show_cube;
-	ImGuiWindowFlags CopilotWindowFlags;
+	ImGuiWindow CopilotWindow;
 
 	std::deque<std::string> copilot_messages; // inbound  (Copilot → App)
 	std::deque<std::string> user_messages; // outbound (App → Copilot)

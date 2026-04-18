@@ -203,7 +203,7 @@ void ApplyStyleToml(ImGuiStyle* style, const WindowStateToml::StyleToml& persist
 
 StyleEditor::StyleEditor()
     : IsOpen { false }
-    , WindowFlags { ImGuiWindowFlags_None }
+    , Window {}
     , m_default_style {}
     , m_current_preset_name {}
     , m_window_rect { false, 0.0f, 0.0f, 0.0f, 0.0f }
@@ -223,18 +223,18 @@ void StyleEditor::Draw()
 		return;
 
 	if (m_apply_layout_once && m_window_rect.valid) {
-		ImGui::SetNextWindowPos(ImVec2(m_window_rect.x, m_window_rect.y), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(m_window_rect.w, m_window_rect.h), ImGuiCond_Always);
+		Window.SetNextPos(ImVec2(m_window_rect.x, m_window_rect.y), ImGuiCond_Always);
+		Window.SetNextSize(ImVec2(m_window_rect.w, m_window_rect.h), ImGuiCond_Always);
 	} else {
-		ImGui::SetNextWindowSize(ImVec2(720.0f, 680.0f), ImGuiCond_FirstUseEver);
+		Window.SetNextSize(ImVec2(720.0f, 680.0f), ImGuiCond_FirstUseEver);
 	}
-	if (!ImGui::Begin("Style Editor", &IsOpen, WindowFlags)) {
-		ImGui::End();
+	if (!Window.Begin("Style Editor", &IsOpen, Window.Flags)) {
+		Window.End();
 		return;
 	}
 	{
-		ImVec2 pos = ImGui::GetWindowPos();
-		ImVec2 size = ImGui::GetWindowSize();
+		ImVec2 pos = Window.GetWindowPos();
+		ImVec2 size = Window.GetWindowSize();
 		m_window_rect = { true, pos.x, pos.y, size.x, size.y };
 		m_apply_layout_once = false;
 	}
@@ -247,7 +247,7 @@ void StyleEditor::Draw()
 		ApplyPresetByName(m_current_preset_name);
 	ImGui::Separator();
 	ImGui::ShowStyleEditor();
-	ImGui::End();
+	Window.End();
 }
 
 void StyleEditor::ApplyLayout(const WindowStateToml& state)

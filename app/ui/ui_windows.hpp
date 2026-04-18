@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "imgui_console.hpp"
 #include "imgui_debug_log_mirror.hpp"
+#include "imgui_window.hpp"
 #include "window_state_toml.hpp"
 #include <functional>
 #include <memory>
@@ -27,10 +28,10 @@ class UiWindows {
 	bool ShowEmojiAtlasWindow;
 	bool RequestQuit;
 	ImVec4 ClearColor;
-	ImGuiWindowFlags HelloWorldWindowFlags;
-	ImGuiWindowFlags AnotherWindowFlags;
-	ImGuiWindowFlags TerminalWindowFlags;
-	ImGuiWindowFlags EmojiAtlasWindowFlags;
+	ImGuiWindow HelloWorldWindow;
+	ImGuiWindow AnotherWindow;
+	ImGuiWindow TerminalWindow;
+	ImGuiWindow EmojiAtlasWindow;
 
 	// Realtime file mirror of the Dear ImGui debug log (tail -f friendly).
 	ImGuiDebugLogMirror DebugLogMirror;

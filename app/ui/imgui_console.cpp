@@ -486,14 +486,14 @@ void ImGuiConsole::DrawContents(const char* id)
 
 void ImGuiConsole::Draw(const char* title, bool* p_open)
 {
-	ImGui::SetNextWindowSize(ImVec2(640, 480), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(title, p_open)) {
-		ImGui::End();
+	m_win.SetNextSize(ImVec2(640, 480), ImGuiCond_FirstUseEver);
+	if (!m_win.Begin(title, p_open)) {
+		m_win.End();
 		return;
 	}
 	std::string uid = std::format("{:p}", static_cast<void*>(this));
 	DrawContents(uid.c_str());
-	ImGui::End();
+	m_win.End();
 }
 
 // ─── TextEditCallback

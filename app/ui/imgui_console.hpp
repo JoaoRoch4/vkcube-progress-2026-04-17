@@ -1,6 +1,7 @@
 #pragma once
 
 #include "imgui.h"
+#include "imgui_window.hpp"
 #include <array>
 #include <atomic>
 #include <format>
@@ -94,6 +95,7 @@ public:
     void SetEmojiAtlas(const EmojiAtlas* atlas) { EmojiAtlasView_ = atlas; }
 
 protected:
+    ImGuiWindow                    m_win;
     std::array<char, 512>           InputBuf;
     std::vector<std::string>          Items;
     std::vector<ConsoleCommandDef> Commands;

@@ -14,7 +14,7 @@ AppWindows::AppWindows()
     , show_copilot { true }
     , show_hot_module { true }
     , show_cube { true }
-    , CopilotWindowFlags { ImGuiWindowFlags_None }
+    , CopilotWindow {}
     , copilot_messages {}
     , user_messages {}
     , m_cube { nullptr }
@@ -100,15 +100,15 @@ void AppWindows::BuildCopilot()
 	if (!show_copilot)
 		return;
 	if (m_apply_copilot_layout_once && m_copilot_window.valid) {
-		ImGui::SetNextWindowPos(ImVec2(m_copilot_window.x, m_copilot_window.y), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(m_copilot_window.w, m_copilot_window.h), ImGuiCond_Always);
+		CopilotWindow.SetNextPos(ImVec2(m_copilot_window.x, m_copilot_window.y), ImGuiCond_Always);
+		CopilotWindow.SetNextSize(ImVec2(m_copilot_window.w, m_copilot_window.h), ImGuiCond_Always);
 	} else {
-		ImGui::SetNextWindowSize(ImVec2(480, 200), ImGuiCond_Appearing);
-		ImGui::SetNextWindowPos(ImVec2(20, 200), ImGuiCond_Appearing);
+		CopilotWindow.SetNextSize(ImVec2(480, 200), ImGuiCond_Appearing);
+		CopilotWindow.SetNextPos(ImVec2(20, 200), ImGuiCond_Appearing);
 	}
-	if (ImGui::Begin("Copilot", &show_copilot, CopilotWindowFlags)) {
-		ImVec2 pos = ImGui::GetWindowPos();
-		ImVec2 size = ImGui::GetWindowSize();
+	if (CopilotWindow.Begin("Copilot", &show_copilot, CopilotWindow.Flags)) {
+		ImVec2 pos = CopilotWindow.GetWindowPos();
+		ImVec2 size = CopilotWindow.GetWindowSize();
 		m_copilot_window = { true, pos.x, pos.y, size.x, size.y };
 		m_apply_copilot_layout_once = false;
 
@@ -140,7 +140,7 @@ void AppWindows::BuildCopilot()
 				RunPython(m_input_buf.data());
 		}
 	}
-	ImGui::End();
+	CopilotWindow.End();
 }
 
 void AppWindows::BuildAll()
