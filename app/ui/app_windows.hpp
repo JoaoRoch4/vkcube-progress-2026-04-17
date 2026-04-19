@@ -8,6 +8,7 @@
 
 #include "app/ui/imanim.hpp"
 #include "app/ui/imgui_window.hpp"
+#include "scripting/cling_runtime.hpp"
 #include "scripting/hybrid_runtime.hpp"
 #include "app/ui/main_menu_bar.hpp"
 #include "app/ui/window_state_toml.hpp"
@@ -38,6 +39,7 @@ class AppWindows {
 		StyleEditor* style_editor, TestEngineLayer* test_engine);
 	void RunJavaScript(std::string_view prompt);
 	void RunPython(std::string_view prompt);
+	void RunCpp(std::string_view snippet);
 	void ApplyLayout(const WindowStateToml& state);
 	void ExportLayout(WindowStateToml* state) const;
 	void BuildAll();
@@ -55,6 +57,8 @@ class AppWindows {
 	std::array<char, 512> m_input_buf;
 	MainMenuBar m_main_menu;
 	HybridScriptRuntime m_hybrid_runtime;
+	ClingRuntime m_cling_runtime;
+	int m_runtime_mode; // 0=JS  1=Python  2=C++(cling)
 	WindowStateToml::WindowRectToml m_copilot_window;
 	bool m_apply_copilot_layout_once;
 	bool m_copilot_waiting;

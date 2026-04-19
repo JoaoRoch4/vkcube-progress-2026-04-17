@@ -6,6 +6,7 @@
 #include "app/platform/sdl_window.hpp"
 #include "app/renderer/vulkan/vulkan_context.hpp"
 #include "app/ui/imgui_layer.hpp"
+#include "cling_window.h"
 #include "simple_window.h"
 
 namespace {
@@ -57,6 +58,7 @@ bool SimpleProgram::Init()
 	ImGui_ImplVulkan_InitInfo init_info = m_vulkan.MakeInitInfo();
 	m_imgui.Init(m_sdl.Window, init_info, m_sdl.MainScale);
 	simpleWindow.Open();
+	clingWindow.Open();
 	return true;
 }
 
@@ -74,7 +76,8 @@ void SimpleProgram::Frame()
 
 	m_imgui.NewFrame();
 	simpleWindow.Draw();
-	if (!simpleWindow.IsOpen())
+	clingWindow.Draw();
+	if (!simpleWindow.IsOpen() && !clingWindow.IsOpen())
 		m_done = true;
 	m_imgui.Render();
 

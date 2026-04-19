@@ -87,6 +87,7 @@ set(IMGUI_TE_SOURCES
 
 # ── App class sources ─────────────────────────────────────────────────────────
 set(APP_SOURCES
+    ${APP_DIR}/scripting/cling_runtime.cpp
     ${APP_DIR}/scripting/hybrid_runtime.cpp
     ${APP_DIR}/platform/sdl_window.cpp
     ${APP_DIR}/platform/plutosvg_ft_override.cpp
@@ -166,7 +167,9 @@ target_compile_options(vkcube PRIVATE
 add_executable(imrad_simple_program
     ${CMAKE_CURRENT_SOURCE_DIR}/imrad_simple_program/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imrad_simple_program/simple_window.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/imrad_simple_program/cling_window.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui_test_engine_stubs.cpp
+    ${APP_DIR}/scripting/cling_runtime.cpp
     ${APP_DIR}/platform/sdl_window.cpp
     ${APP_DIR}/platform/plutosvg_ft_override.cpp
     ${APP_DIR}/renderer/vulkan/vulkan_context.cpp

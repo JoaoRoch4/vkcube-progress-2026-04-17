@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Combined C++ / ImGui / Vulkan / SDL3 / ImRAD / LLDB MCP server.
+Combined C++ / ImGui / Vulkan / SDL3 / ImRAD / LLDB / Cling MCP server.
 
 Merges the existing imgui-cpp-expert and lldb-dap MCP capabilities while adding:
   - workspace file search/read helpers
@@ -11,6 +11,7 @@ Merges the existing imgui-cpp-expert and lldb-dap MCP capabilities while adding:
   - SDL3 docs lookup + diagnostic interpretation helpers
   - SDL3 project implementation scanning helpers
   - ImRAD install / prototype / launch helpers
+  - Cling interactive C++ interpreter helpers
   - session history and debug checkpoint helpers
 """
 
@@ -76,9 +77,9 @@ COMBINED_INSTRUCTIONS = (
     + "\n\n## Combined MCP Extensions\n"
       "- You also expose live LLDB DAP debugger tools for vkcube and arbitrary binaries.\n"
       "- You provide workspace-scoped file search/read helpers, compile_commands introspection,\n"
-      "  build/run helpers for known binaries, LLVM/Clang, Vulkan, SDL3, and ImRAD helpers,\n"
+      "  build/run helpers for known binaries, LLVM/Clang, Vulkan, SDL3, ImRAD, and Cling helpers,\n"
       "  Vulkan/SDL3 diagnostic interpretation, SDL3 and ImRAD project scanning,\n"
-      "  and debug checkpoints.\n"
+      "  Cling interactive C++ interpreter execution, and debug checkpoints.\n"
       "- Prefer safe workspace-scoped operations over arbitrary shell execution.\n"
 )
 
@@ -114,6 +115,18 @@ IMRAD_TEMPLATE_CANDIDATES = [
     IMRAD_INSTALL_ROOT / "template" / "glfw" / "main.cpp",
 ]
 IMRAD_LAUNCH_ROOT = Path("/tmp/cpp-imgui-mcp-imrad")
+
+# ── Cling interpreter configuration ───────────────────────────────────────────
+CLING_BINARY_CANDIDATES = [
+    Path(os.environ.get("CLING_BIN", "")).expanduser() if os.environ.get("CLING_BIN") else None,
+    Path("/usr/bin/cling"),
+    Path("/usr/local/bin/cling"),
+    Path("/opt/cling/bin/cling"),
+]
+CLING_EXECUTE_TIMEOUT = 30
+# Path to the Cling interpreter window ImRAD subproject source files.
+_CLING_WINDOW_HEADER = VKCUBE_PROGRESS_ROOT / "imrad_simple_program" / "cling_window.h"
+_CLING_WINDOW_SOURCE = VKCUBE_PROGRESS_ROOT / "imrad_simple_program" / "cling_window.cpp"
 
 SDL_DOC_COMPONENTS: dict[str, dict[str, str]] = {
     "frontpage": {
@@ -1849,6 +1862,144 @@ def read_source(path: str, line: int, context_lines: int = 10) -> str:
 @mcp.tool(description="Get both the call stack and local variables for the top frames.")
 def inspect_state(thread_id: int = 0, frames: int = 5, vars_depth: int = 2) -> str:
     return lldb.inspect_state(thread_id=thread_id, frames=frames, vars_depth=vars_depth)
+
+
+# ── Cling interactive C++ interpreter tools ────────────────────────────────────
+
+def _find_cling_binary() -> Path | None:
+    for candidate in CLING_BINARY_CANDIDATES:
+        if candidate is not None and candidate.exists():
+            return candidate
+    found = shutil.which("cling")
+    if found:
+        return Path(found)
+    return None
+
+
+def _cling_execute_impl(snippet: str, timeout: float = CLING_EXECUTE_TIMEOUT) -> dict[str, object]:
+    binary = _find_cling_binary()
+    if binary is None:
+        return {
+            "ok": False,
+            "exit_code": -1,
+            "output": (
+                "cling not found. Install cling or set CLING_BIN=/path/to/cling. "
+                "On Debian/Ubuntu: sudo apt install cling"
+            ),
+        }
+
+    input_text = snippet.rstrip("\n") + "\n.q\n"
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            prefix="cling_mcp_",
+            suffix=".cpp",
+            encoding="utf-8",
+            delete=False,
+        ) as tmp_file:
+            tmp_file.write(input_text)
+            tmp_path = Path(tmp_file.name)
+        cmd = [str(binary), "--nologo"]
+        with tmp_path.open(encoding="utf-8") as stdin_file:
+            try:
+                result = subprocess.run(
+                    cmd,
+                    stdin=stdin_file,
+                    capture_output=True,
+                    text=True,
+                    timeout=max(1.0, min(timeout, 120.0)),
+                )
+            except subprocess.TimeoutExpired as exc:
+                partial = ((exc.stdout or "") + (exc.stderr or "")).strip()
+                return {
+                    "ok": False,
+                    "exit_code": -1,
+                    "output": f"cling timed out after {timeout}s.\n\n{partial or '(no output before timeout)'}",
+                }
+    finally:
+        tmp_path.unlink(missing_ok=True)
+
+    raw = (result.stdout + result.stderr).strip()
+    # Strip cling banner/prompt lines ("[cling]$ " etc.)
+    clean_lines = [
+        line for line in raw.splitlines()
+        if not line.startswith("[cling]") and not line.startswith("****************")
+    ]
+    output = "\n".join(clean_lines).strip() or "(no output)"
+    return {
+        "ok": result.returncode == 0,
+        "exit_code": result.returncode,
+        "output": output,
+    }
+
+
+@mcp.tool(description=(
+    "Report whether the Cling interactive C++ interpreter is installed, its path, "
+    "and the status of the ClingWindow ImRAD subproject files."
+))
+def get_cling_status() -> str:
+    binary = _find_cling_binary()
+    header_exists = _CLING_WINDOW_HEADER.exists()
+    source_exists = _CLING_WINDOW_SOURCE.exists()
+    lines = [
+        "Cling interpreter status:",
+        f"  binary:   {binary if binary else '(not found — install cling or set CLING_BIN)'}",
+        f"  available: {'yes' if binary else 'no'}",
+        "",
+        "ImRAD ClingWindow subproject:",
+        f"  header: {_CLING_WINDOW_HEADER} ({'exists' if header_exists else 'missing'})",
+        f"  source: {_CLING_WINDOW_SOURCE} ({'exists' if source_exists else 'missing'})",
+        f"  subproject: {'ready' if (header_exists and source_exists) else 'incomplete'}",
+    ]
+    return "\n".join(lines)
+
+
+@mcp.tool(description=(
+    "Execute a C++ snippet via the Cling interactive interpreter. "
+    "Multi-line snippets are supported. Include headers with #include as needed. "
+    "Returns the interpreter output."
+))
+def cling_execute(snippet: str, timeout_sec: float = CLING_EXECUTE_TIMEOUT) -> str:
+    if not snippet.strip():
+        return "Snippet is empty."
+    result = _cling_execute_impl(snippet, timeout=timeout_sec)
+    status = "OK" if result["ok"] else f"FAILED (exit {result['exit_code']})"
+    return f"cling: {status}\n\n{result['output']}"
+
+
+@mcp.tool(description=(
+    "Evaluate a C++ expression via Cling and return its printed value. "
+    "Automatically wraps the expression in a std::cout print call."
+))
+def cling_probe(expression: str, timeout_sec: float = CLING_EXECUTE_TIMEOUT) -> str:
+    if not expression.strip():
+        return "Expression is empty."
+    snippet = f"#include <iostream>\nstd::cout << ({expression}) << std::endl;"
+    result = _cling_execute_impl(snippet, timeout=timeout_sec)
+    status = "OK" if result["ok"] else f"FAILED (exit {result['exit_code']})"
+    return f"cling probe ({expression!r}): {status}\n\n{result['output']}"
+
+
+@mcp.tool(description=(
+    "Report the status of the ClingWindow ImRAD subproject in imrad_simple_program/. "
+    "Shows which source files exist and their sizes."
+))
+def get_cling_interpreter_window_status() -> str:
+    files = [
+        ("header", _CLING_WINDOW_HEADER),
+        ("source", _CLING_WINDOW_SOURCE),
+        ("main",   VKCUBE_PROGRESS_ROOT / "imrad_simple_program" / "main.cpp"),
+        ("runtime_hpp", VKCUBE_PROGRESS_ROOT / "app" / "scripting" / "cling_runtime.hpp"),
+        ("runtime_cpp", VKCUBE_PROGRESS_ROOT / "app" / "scripting" / "cling_runtime.cpp"),
+    ]
+    lines = ["ClingWindow ImRAD subproject file status:"]
+    for label, path in files:
+        if path.exists():
+            size = path.stat().st_size
+            lines.append(f"  {label}: {path} ({size} bytes)")
+        else:
+            lines.append(f"  {label}: {path} (MISSING)")
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":
